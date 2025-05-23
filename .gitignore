@@ -32,6 +32,13 @@ MANIFEST
 *.manifest
 *.spec
 
+# Virtual envrionment
+myenv/
+
+#pycache
+__pycache__/
+*.py[cod]
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
