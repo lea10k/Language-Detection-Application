@@ -6,15 +6,8 @@
     <title>Titel</title>
   </head>
   <body>
-    <form action="HIER MUSS EINE DATEI EINGETRAGEN WERDEN">
-    <label for="submission">Input to detect language:</label><br>
-    <input type="text" id="submission" name="submission"><br><br>
-    <input type="submit" value="Submit">
-    </form>
-
-    <p>Click the "Submit" button and the form-data will be sent to a page on the 
-    server called "action_page.php".</p>
-
+    {% block body_content %}
+    {% endblock %}
 </body>
 </html>
   </body>

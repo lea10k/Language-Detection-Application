@@ -1,13 +1,15 @@
-# File: Tutorial/app.py
-from flask import Flask
+from flask import Flask, request, render_template  # Import Flask framework and required modules
 
-# create an instance of the flask application
-app = Flask(__name__)
+app = Flask(__name__)  # Create a new Flask web application instance
 
-# Create a route on your app
-@app.route("/", strict_slashes=False, methods=["GET"])
+@app.route("/", methods=["GET"])  # Define route for the homepage, accepts GET requests
 def index():
-    return "<h1>This is the Home Page</h1>"
+    return render_template("index.html")  # Render and return the 'index.html' template
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5100)
+@app.route("/detect", methods=["POST"])  # Define route for '/detect', accepts POST requests
+def detect():
+    text = request.form["submission"]  # Get the value of the 'submission' field from the form data
+    return f"You sent: {text}"  # Return a response displaying the submitted text
+
+if __name__ == "__main__":  # Check if this script is being run directly
+    app.run(debug=True, port=8000)  # Start the Flask development server with debug mode on port 8000
