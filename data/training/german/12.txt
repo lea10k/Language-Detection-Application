@@ -1,0 +1,8 @@
+Selbstverständlich ist die Energieausbeute dieser kleinen organischen Solarzellen nicht
+mit der großer Photovoltaikanlagen vergleichbar. Ihre Energieeffizienz beträgt gerade
+einmal 7,9 Prozent, während konventionelle Solarzellen einen Wirkungsgrad von fast
+20 Prozent erreichen und organische Solarzellen auf immerhin 12 Prozent kommen. Mit
+einer Leistung von knapp unter acht Milliwatt pro Quadratzentimeter bleibt sie auch bei
+der Stromerzeugung weit hinter Solaranlagen auf dem Dach zurück. Dennoch reiche ihre
+Stromausbeute aus, um kleine Geräte, wie beispielsweise in den Stoff integrierte Senso-
+ren, mit Strom zu versorgen, erklärt Kenjiro Fukuda vom RIKEN-Forschungszentrum.
