@@ -2,7 +2,7 @@ import re
 
 """
 Preprocess text for trilingual language detection (English, German, Italian).
-This function removes emails, URLs, standalone numbers, and keeps only letters relevant for
+This function removes punctuation, standalone numbers, and keeps only letters relevant for
 EN/DE/IT languages, including apostrophes and spaces.
 It also converts the text to lowercase and cleans up whitespace.
 
@@ -12,19 +12,19 @@ It also converts the text to lowercase and cleans up whitespace.
     str: Preprocessed text ready for language detection.
 """
 def preprocessForTrilingualDetection(text):
-    # 1. Normalize spacing before punctuation
-    text = re.sub(r'\s+([.!?,:;])', r'\1', text)  # Remove space before punctuation
+    # Normalize spacing before punctuation
+    text = re.sub(r'\s+([.!?,:;@])', r'\1', text)  # Remove space before punctuation
     
-    # 2. Replace punctuation with underscores (padding)
-    text = re.sub(r'[.!?,:;]', '_', text)
-    
-    # 3. Keep only letters, apostrophes, underscores, spaces
+    # Replace punctuation with underscores (padding)
+    text = re.sub(r'[.!?,:;@]', '_', text)
+
+    # Keep only letters, apostrophes, underscores, spaces
     text = re.sub(r'[^a-zA-ZäöüßàèéìíòóùúçÀÈÉÌÍÒÓÙÚÇ\'_\s]', '', text)
     
-    # 4. Replace underscores with spaces
+    # Replace underscores with spaces
     text = text.replace('_', ' ')
     
-    # 5. Clean up multiple spaces
+    # Clean up multiple spaces
     text = re.sub(r'\s+', ' ', text).strip()
     
     return text.lower()
