@@ -1,6 +1,16 @@
 import re
-from nltk.corpus.reader.plaintext import PlaintextCorpusReader
-    
+
+"""
+Preprocess text for trilingual language detection (English, German, Italian).
+This function removes emails, URLs, standalone numbers, and keeps only letters relevant for
+EN/DE/IT languages, including apostrophes and spaces.
+It also converts the text to lowercase and cleans up whitespace.
+
+:param text: Input text to preprocess
+:type text: str
+:returns:
+    str: Preprocessed text ready for language detection.
+"""
 def preprocessForTrilingualDetection(text):
     # Remove emails, URLs, numbers
     text = re.sub(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', '', text)
