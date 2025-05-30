@@ -9,7 +9,7 @@ Tokenizes the input text after preprocessing for trilingual detection, and adds 
     list: A list of words from the input text, each padded with an underscore at the beginning and end.
 Example:
     >>> tokenizeWithPadding("Hello world!")
-    ['_Hello_', '_world!_']
+    ['_hello_', '_world_']
 Note:
     The input text is first preprocessed using `preprocessForTrilingualDetection` from the `preprocessing` module.
 """

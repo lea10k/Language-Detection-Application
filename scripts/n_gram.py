@@ -10,7 +10,7 @@ import tokenization
     :returns:
         list: A list of n-grams extracted from the text.
 """
-def n_gram(words, n):
+def compute_n_gram(words, n):
     n_grams = []
 
     for word in words:
@@ -18,4 +18,4 @@ def n_gram(words, n):
 
     return n_grams
 
-print(n_gram(tokenization.tokenizeWithPadding("This is a test email: test@example.com and a URL: https://www.example.com"), 3))
+print(compute_n_gram(tokenization.tokenizeWithPadding("This is a test email: test@example.com and a URL: https://www.example.com"), 3))

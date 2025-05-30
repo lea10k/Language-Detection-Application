@@ -13,10 +13,14 @@ It also converts the text to lowercase and cleans up whitespace.
 """
 def preprocessForTrilingualDetection(text):
     # Normalize spacing before punctuation
-    text = re.sub(r'\s+([.!?,:;@])', r'\1', text)  # Remove space before punctuation
+    text = re.sub(r'\s+([.!?,:;])', r'\1', text)  # Remove space before punctuation
     
     # Replace punctuation with underscores (padding)
     text = re.sub(r'[.!?,:;@]', '_', text)
+    
+    # Remove typographic quotes (but keep apostrophes like it's, l'homme)
+    text = text.replace('"', '').replace('“', '').replace('”', '')
+    text = text.replace('‘', '').replace('’', '')
 
     # Keep only letters, apostrophes, underscores, spaces
     text = re.sub(r'[^a-zA-ZäöüßàèéìíòóùúçÀÈÉÌÍÒÓÙÚÇ\'_\s]', '', text)
@@ -35,3 +39,4 @@ print(preprocessForTrilingualDetection("Questo è un test con numeri 456 e carat
 print(preprocessForTrilingualDetection("Mixed languages: English, Deutsch, Italiano!"))
 print(preprocessForTrilingualDetection("Lea's Haus ist schön."))
 print(preprocessForTrilingualDetection("Luca's casa è bella. Ma anche la sua macchina!"))
+print(preprocessForTrilingualDetection("Lea's Haus ist schön. `Luca's` casa è bella. Ma auch la sua macchina!"))
