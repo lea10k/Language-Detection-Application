@@ -12,15 +12,19 @@ It also converts the text to lowercase and cleans up whitespace.
     str: Preprocessed text ready for language detection.
 """
 def preprocessForTrilingualDetection(text):
-    # Remove emails, URLs, numbers
-    text = re.sub(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', '', text)
-    text = re.sub(r'http[s]?://\S+', '', text)
-    text = re.sub(r'\b\d+\b', '', text)  # Remove standalone numbers
+    # 1. Normalize spacing before punctuation
+    text = re.sub(r'\s+([.!?,:;])', r'\1', text)  # Remove space before punctuation
     
-    # Keep only letters relevant for EN/DE/IT + apostrophes + spaces
-    text = re.sub(r'[^a-zA-ZäöüßàèéìíòóùúçÀÈÉÌÍÒÓÙÚÇ\'\s]', ' ', text)
+    # 2. Replace punctuation with underscores (padding)
+    text = re.sub(r'[.!?,:;]', '_', text)
     
-    # Clean up whitespace
+    # 3. Keep only letters, apostrophes, underscores, spaces
+    text = re.sub(r'[^a-zA-ZäöüßàèéìíòóùúçÀÈÉÌÍÒÓÙÚÇ\'_\s]', '', text)
+    
+    # 4. Replace underscores with spaces
+    text = text.replace('_', ' ')
+    
+    # 5. Clean up multiple spaces
     text = re.sub(r'\s+', ' ', text).strip()
     
     return text.lower()
@@ -30,3 +34,4 @@ print(preprocessForTrilingualDetection("Das ist ein Test mit Zahlen 123 und Sond
 print(preprocessForTrilingualDetection("Questo è un test con numeri 456 e caratteri speciali àèéìíòóùúç!"))
 print(preprocessForTrilingualDetection("Mixed languages: English, Deutsch, Italiano!"))
 print(preprocessForTrilingualDetection("Lea's Haus ist schön."))
+print(preprocessForTrilingualDetection("Luca's casa è bella. Ma anche la sua macchina!"))
