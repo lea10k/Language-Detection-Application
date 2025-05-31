@@ -1,19 +1,19 @@
 import preprocessing
 
-"""
-Tokenizes the input text after preprocessing for trilingual detection, and adds padding underscores to each word.
-
-:args:
-    text (str): The input text to be tokenized and padded.
-:returns:
-    list: A list of words from the input text, each padded with an underscore at the beginning and end.
-Example:
-    >>> tokenizeWithPadding("Hello world!")
-    ['_hello_', '_world_']
-Note:
-    The input text is first preprocessed using `preprocessForTrilingualDetection` from the `preprocessing` module.
-"""
 def tokenizeWithPadding(text):
+    """
+    Tokenizes the input text after preprocessing for trilingual detection, and adds padding underscores to each word.
+
+    :args:
+        text (str): The input text to be tokenized and padded.
+    :returns:
+        list: A list of words from the input text, each padded with an underscore at the beginning and end.
+    Example:
+        >>> tokenizeWithPadding("Hello world!")
+        ['_hello_', '_world_']
+    Note:
+        The input text is first preprocessed using `preprocessForTrilingualDetection` from the `preprocessing` module.
+    """
     text = preprocessing.preprocessForTrilingualDetection(text) 
     words = text.split()
     # Add underscores at the beginning and end of each word

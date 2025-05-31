@@ -1,6 +1,7 @@
 import tokenization
 
-"""
+def compute_n_gram(words, n):
+    """
     Generate n-grams from the input text.
     
     :param text: Input text to generate n-grams from
@@ -9,8 +10,7 @@ import tokenization
     :type n: int
     :returns:
         list: A list of n-grams extracted from the text.
-"""
-def compute_n_gram(words, n):
+    """
     n_grams = []
 
     for word in words:
