@@ -33,10 +33,11 @@ def preprocessForTrilingualDetection(text):
     
     return text.lower()
 
-print(preprocessForTrilingualDetection("This is a test email: test@example.com and a URL: https://www.example.com"))
+"""print(preprocessForTrilingualDetection("This is a test email: test@example.com and a URL: https://www.example.com"))
 print(preprocessForTrilingualDetection("Das ist ein Test mit Zahlen 123 und Sonderzeichen äöüß!"))
 print(preprocessForTrilingualDetection("Questo è un test con numeri 456 e caratteri speciali àèéìíòóùúç!"))
 print(preprocessForTrilingualDetection("Mixed languages: English, Deutsch, Italiano!"))
 print(preprocessForTrilingualDetection("Lea's Haus ist schön."))
 print(preprocessForTrilingualDetection("Luca's casa è bella. Ma anche la sua macchina!"))
 print(preprocessForTrilingualDetection("Lea's Haus ist schön. `Luca's` casa è bella. Ma auch la sua macchina!"))
+"""

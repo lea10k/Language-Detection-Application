@@ -21,9 +21,9 @@ def tokenizeWithPadding(text):
     
     return padded_words
 
-print(tokenizeWithPadding("This is a test email: test@example.com and a URL: https://www.example.com"))
+"""print(tokenizeWithPadding("This is a test email: test@example.com and a URL: https://www.example.com"))
 print(tokenizeWithPadding("Das ist ein Test mit Zahlen 123 und Sonderzeichen äöüß!"))
 print(tokenizeWithPadding("Questo è un test con numeri 456 e caratteri speciali àèéìíòóùúç!"))
 print(tokenizeWithPadding("Mixed languages: English, Deutsch, Italiano!"))
 print(tokenizeWithPadding("Lea's Haus ist schön."))
-print(tokenizeWithPadding("Luca's casa è bella. Ma anche la sua macchina!"))
+print(tokenizeWithPadding("Luca's casa è bella. Ma anche la sua macchina!"))"""
