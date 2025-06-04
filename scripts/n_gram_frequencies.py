@@ -68,7 +68,7 @@ def ComputeRelativeFrequencies(tokenized_text, n):
     """
     freq_dist = ComputeFrequencies(tokenized_text, n)
     total_count = sum(freq_dist.values())
-    relative_freq_dist = {k: v / total_count for k, v in freq_dist.items()}
+    relative_freq_dist = {k: round(v / total_count, 10) for k, v in freq_dist.items()}
     return relative_freq_dist
 
 #print(ComputeRelativeFrequencies(tokenization.tokenizeWithPadding(GetWholeText('/home/lea_k/language_detection_project/Language-Detection-Application/data/development/german')), 3))

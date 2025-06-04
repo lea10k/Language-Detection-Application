@@ -18,4 +18,4 @@ def compute_n_gram(words, n):
 
     return n_grams
 
-#print(compute_n_gram(tokenization.tokenizeWithPadding("This is a test email: test@example.com and a URL: https://www.example.com"), 3))
+#print(compute_n_gram(tokenization.tokenizeWithPadding("This is a test email: test@example.com and a URL: https://www.example.com"), 4))
