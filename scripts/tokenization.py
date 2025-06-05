@@ -1,4 +1,4 @@
-from scripts.preprocessing import preprocessForTrilingualDetection
+from preprocessing import preprocessForTrilingualDetection
 
 def tokenizeWithPadding(text):
     """

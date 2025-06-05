@@ -1,6 +1,7 @@
+import sys
 from flask import Flask, request, render_template  # Import Flask framework and required modules
-from scripts.word_level_detector import WordLevelLanguageDetector
-import json
+sys.path.append('/home/lea_k/language_detection_project/Language-Detection-Application/scripts')  # Add the scripts directory to the system path for module imports
+from word_level_detector import WordLevelLanguageDetector
 
 app = Flask(__name__)  # Create a new Flask web application instance
 
