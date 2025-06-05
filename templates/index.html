@@ -6,4 +6,15 @@
     <input type="text" id="submission" name="submission"><br><br>
     <input type="submit" value="Submit">
 </form>
+
+{% if results %}
+    <h2>Detection Results</h2>
+    <ul>
+        {% for item in results %}
+            <li><strong>{{ item.word }}</strong>: {{ item.language }} ({{ item.confidence }})</li>
+        {% endfor %}
+    </ul>
+{% endif %}
 {% endblock %}
+
+
