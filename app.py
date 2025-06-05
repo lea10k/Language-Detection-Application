@@ -1,6 +1,19 @@
 from flask import Flask, request, render_template  # Import Flask framework and required modules
+from scripts.word_level_detector import WordLevelLanguageDetector
+import json
 
 app = Flask(__name__)  # Create a new Flask web application instance
+
+model_paths = {
+    'german': {
+        '3gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/german/3grams.json',
+        '4gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/german/4grams.json'
+    },
+    
+    #HIER MUSS NOCH ITALIANO UND ENGLISCH HINZUGEFÜGT WERDEN
+}
+
+detector = WordLevelLanguageDetector(model_paths)
 
 @app.route("/", methods=["GET"])  # Define route for the homepage, accepts GET requests
 def index():
@@ -9,7 +22,8 @@ def index():
 @app.route("/detect", methods=["POST"])  # Define route for '/detect', accepts POST requests
 def detect():
     text = request.form["submission"]  # Get the value of the 'submission' field from the form data
-    return f"You sent: {text}"  # Return a response displaying the submitted text
+    results = detector.detect_text_languages(text)
+    return render_template("index.html", text=text, results=results)
 
 if __name__ == "__main__":  # Check if this script is being run directly
     app.run(debug=True, port=8000)  # Start the Flask development server with debug mode on port 8000

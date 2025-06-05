@@ -1,9 +1,9 @@
 import math
-import json
-from n_gram import compute_n_gram
-import tokenization
+#import json
+from scripts.n_gram import compute_n_gram
+"""import tokenization
 import n_gram_frequencies
-from nltk.corpus import PlaintextCorpusReader
+from nltk.corpus import PlaintextCorpusReader"""
 
 def calculate_perplexity(test_tokens, model_probs, n, smoothing=1e-4):
     n_grams = compute_n_gram(test_tokens, n)

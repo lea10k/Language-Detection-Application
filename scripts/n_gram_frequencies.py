@@ -1,5 +1,5 @@
-import tokenization
-import n_gram
+from n_gram import compute_n_gram
+from tokenization import tokenizeWithPadding
 import json
 from nltk.corpus import PlaintextCorpusReader
 from nltk.probability import FreqDist
@@ -54,7 +54,7 @@ def ComputeFrequencies(tokenized_text, n):
     :param tokenized_text: List of tokenized words
     :param n: The n-gram size
     """
-    n_grams = n_gram.compute_n_gram(tokenized_text, n)
+    n_grams = compute_n_gram(tokenized_text, n)
     # Compute frequency distribution
     freq_dist = FreqDist(n_grams)
     return SortFrequencies(freq_dist)
@@ -84,7 +84,7 @@ def SaveAsJSON(data, filename):
 
 # Test the functions with a sample corpus
 corpus_root = '/home/lea_k/language_detection_project/Language-Detection-Application/data/development/german'
-tokenized_text = tokenization.tokenizeWithPadding(GetWholeText(corpus_root))
+tokenized_text = tokenizeWithPadding(GetWholeText(corpus_root))
 
 # Check if the sum of relative frequencies is 1 to ensure correctness of the computation
 rel_freqs = ComputeRelativeFrequencies(tokenized_text, 3)

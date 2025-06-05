@@ -1,4 +1,4 @@
-import preprocessing
+from scripts.preprocessing import preprocessForTrilingualDetection
 
 def tokenizeWithPadding(text):
     """
@@ -14,7 +14,7 @@ def tokenizeWithPadding(text):
     Note:
         The input text is first preprocessed using `preprocessForTrilingualDetection` from the `preprocessing` module.
     """
-    text = preprocessing.preprocessForTrilingualDetection(text) 
+    text = preprocessForTrilingualDetection(text) 
     words = text.split()
     # Add underscores at the beginning and end of each word
     padded_words = ["_" + word + "_" for word in words if word.strip()]
