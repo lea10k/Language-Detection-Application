@@ -7,11 +7,23 @@ app = Flask(__name__)  # Create a new Flask web application instance
 
 model_paths = {
     'german': {
+        '2gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/german/2grams.json',
         '3gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/german/3grams.json',
-        '4gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/german/4grams.json'
+        '4gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/german/4grams.json',
+        '5gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/german/5grams.json'
     },
-    
-    #HIER MUSS NOCH ITALIANO UND ENGLISCH HINZUGEFÜGT WERDEN
+    'english': {
+        '2gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/english/2grams.json',
+        '3gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/english/3grams.json',
+        '4gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/english/4grams.json',
+        '5gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/english/5grams.json'
+    },
+    'italian': {
+        '2gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/italian/2grams.json',
+        '3gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/italian/3grams.json',
+        '4gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/italian/4grams.json',
+        '5gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/italian/5grams.json'
+    }
 }
 
 detector = WordLevelLanguageDetector(model_paths)
