@@ -15,3 +15,4 @@ def compute_n_gram(words, n):
 """import tokenization
 
 print(compute_n_gram(tokenization.tokenizeWithPadding("This is a test email: test@example.com and a URL: https://www.example.com"), 4))"""
+#print(compute_n_gram(['_hallo_', '_welt_'], 2))  # Example usage, should print ['_ha', 'al', 'll', 'lo', '_w', 'we', 'el', 'lt', '_']

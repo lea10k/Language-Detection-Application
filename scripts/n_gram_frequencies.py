@@ -59,6 +59,16 @@ def ComputeFrequencies(tokenized_text, n):
     freq_dist = FreqDist(n_grams)
     return SortFrequencies(freq_dist)
 
+def ComputeFrequenciesForUnigrams(tokenized_text):
+    """
+    Compute the frequencies of unigrams in the tokenized text
+
+    :param tokenized_text: List of tokenized words
+    """
+    # Compute frequency distribution for unigrams
+    freq_dist = FreqDist(tokenized_text)
+    return SortFrequencies(freq_dist)
+
 def ComputeRelativeFrequencies(tokenized_text, n):
     """
     Compute the relative frequencies of n-grams in the tokenized text
@@ -72,6 +82,17 @@ def ComputeRelativeFrequencies(tokenized_text, n):
     return relative_freq_dist
 
 #print(ComputeRelativeFrequencies(tokenization.tokenizeWithPadding(GetWholeText('/home/lea_k/language_detection_project/Language-Detection-Application/data/development/german')), 3))
+
+def ComputeRelativeFrequenciesForUnigrams(tokenized_text):
+    """
+    Compute the relative frequencies of unigrams in the tokenized text
+
+    :param tokenized_text: List of tokenized words
+    """
+    freq_dist = ComputeFrequenciesForUnigrams(tokenized_text)
+    total_count = sum(freq_dist.values())
+    relative_freq_dist = {k: round(v / total_count, 10) for k, v in freq_dist.items()}
+    return relative_freq_dist
 
 def SaveAsJSON(data, filename):
     """
