@@ -87,14 +87,18 @@ class WordLevelLanguageDetector:
         with open(filepath, 'r', encoding='utf-8') as f:
             freq_map: dict[str, float] = json.load(f) # example: {'_ha': 0.0012, 'al': 0.0023, ...}
         sorted_items = sorted(freq_map.items(), key=lambda kv: kv[1], reverse=True) 
-        #freq_map.items() -> list of tuples (n-gram, frequency)
-        #kv[1] -> List is sorted by second item (frequency) in descending order
-        #example: sorted_items = [('al', 0.0023), ('_ha', 0.0012), ...]
+        """
+        - freq_map.items() -> list of tuples (n-gram, frequency)
+        - kv[1] -> List is sorted by second item (frequency) in descending order
+        - example: sorted_items = [('al', 0.0023), ('_ha', 0.0012), ...]
+        """
         rank_map = {gram: rank for rank, (gram, _) in enumerate(sorted_items, start=1)}
-        #enumerate(sorted_items, start=1) -> Gives for each n-gram its rank starting from 1; example: (1, ('al', 0.0023)), (2, ('_ha', 0.0012)), ...
-        #for rank, (gram,_) in ... -> (gram, _) is taking only the n-gram, not the frequency. _ ignores the frequency value.
-        #{gram: rank for ...} -> Building a distionary: gram = key and rank = value
-        #example: rank_map = {'al': 1, '_ha': 2, ...}
+        """
+        - enumerate(sorted_items, start=1) -> Gives for each n-gram its rank starting from 1; example: (1, ('al', 0.0023)), (2, ('_ha', 0.0012)), ...
+        - for rank, (gram,_) in ... -> (gram, _) is taking only the n-gram, not the frequency. _ ignores the frequency value.
+        - {gram: rank for ...} -> Building a distionary: gram = key and rank = value
+        - example: rank_map = {'al': 1, '_ha': 2, ...}
+        """
         print(f"Profile loaded from {filepath}, total {len(rank_map)} n-grams")
         return rank_map
 
