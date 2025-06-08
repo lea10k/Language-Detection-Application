@@ -16,7 +16,7 @@
             <div class="card shadow-sm w-100 h-100">
                 <div class="card-body d-flex flex-column justify-content-between">
                     <form id="input_form" action="/detect" method="post" class="flex-grow-1 d-flex flex-column">
-                        <label for="input_field" class="form-label">Enter text to detect its language:</label>
+                        <label for="input_field" class="form-label text-center w-100 fs-4 fw-normal">Enter text to detect its language:</label>
                         <textarea id="input_field" name="submission"
                                   class="form-control mb-3 flex-grow-1"
                                   rows="8"
@@ -56,7 +56,7 @@
     </div>
     <!-- Results-Section -->
     {% if results %}
-        <div class="row mt-5 mb-5">
+        <div class="row mt-5 mb-3">
             <div class="col-12 text-center">
                 <h1 class="display-5 fw-bold mb-3">Detection Results</h1>
             </div>
