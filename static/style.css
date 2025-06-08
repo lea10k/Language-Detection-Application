@@ -1,0 +1,17 @@
+#input_form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: auto;
+    position: absolute;
+    left: 50%;
+    box-sizing: border-box;
+    border: none;
+}
+
+#input_field{
+    border-color: #66afe9;
+    outline: solid 1px #66afe9;
+}
+

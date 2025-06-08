@@ -1,12 +1,14 @@
 {% extends "base.html" %}
 
 {% block body_content %}
-<form action="/detect" method="post">
-    <label for="submission">Input to detect language:</label><br>
-    <input type="text" id="submission" name="submission"><br><br>
-    <input type="submit" value="Submit">
-</form>
-
+<div class="container">
+    <form id="input_form" action="/detect" method="post">
+        <label for="submission">Input to detect language:</label><br>
+        <input id="input_field" type="text" name="submission"><br><br>
+        <input type="submit" value="Submit">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </form>
+</div>
 {% if results %}
     <h2>Detection Results</h2>
     <ul>
@@ -15,6 +17,14 @@
         {% endfor %}
     </ul>
 {% endif %}
+
+{% if colored_text %}
+    <h2>Detected Text (farbig):</h2>
+    <div class="container">
+        <p>{{ colored_text|safe }}</p>
+    </div>
+{% endif %}
+
 {% endblock %}
 
 

@@ -87,5 +87,13 @@ def DetectLanguageForEachWord(detect_Word_func, words):
     :param words: A list of words to detect the language for.
     :param detect_Word_func: A function that takes a word and returns its detected language.
     
+    Example:
+    If detect_Word_func is a function that detects the language of a word,
+    and words is ['hello', 'welt', 'ciao'], this function will return a list like:
+    [
+        {'word': 'hello', 'language': 'english', 'confidence': 0.95},
+        {'word': 'welt', 'language': 'german', 'confidence': 0.85},
+        {'word': 'ciao', 'language': 'italian', 'confidence': 0.90}
+    ]
     """
     return [detect_Word_func(token) for token in words]
