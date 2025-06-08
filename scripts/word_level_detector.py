@@ -107,7 +107,7 @@ class WordLevelLanguageDetector:
         Compute weighted out-of-place distance for a single word and language.
         Extracts n-grams via compute_n_gram.
         """
-        weights = {1:0.1, 2:0.2, 3:0.3, 4:0.35, 5:0.15} # Weights for each n-gram level	
+        weights = {1:0.1, 2:0.2, 3:0.3, 4:0.3, 5:0.1} # Weights for each n-gram level	
         total, count = 0.0, 0
         print(f"Calculating distance for '{word}' vs {lang}")
 
@@ -119,7 +119,7 @@ class WordLevelLanguageDetector:
             print(f"Extracted {len(grams)} {n}-grams from '{word}': {grams}")
             if not grams: #if no n-grams were created, skip this level
                 continue
-            ranks = profile[lang] # Example: {'_ha': 1, 'al': 2, ...}
+            ranks = profile[lang] # Loads the n-gram rank profile for the language
             K = self.K_values[n][lang] # Get penalty rank for this language and n-gram size
             avg_penalty = sum((ranks.get(g, K) / 1000.0) for g in grams) / len(grams)
             """
