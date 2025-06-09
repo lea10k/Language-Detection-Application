@@ -1,6 +1,5 @@
-from n_gram import compute_n_gram
-from tokenization import tokenizeWithPadding
 import json
+from n_gram import compute_n_gram
 from nltk.corpus import PlaintextCorpusReader
 from nltk.probability import FreqDist
 
@@ -69,31 +68,6 @@ def ComputeFrequenciesForUnigrams(tokenized_text):
     freq_dist = FreqDist(tokenized_text)
     return SortFrequencies(freq_dist)
 
-def ComputeRelativeFrequencies(tokenized_text, n):
-    """
-    Compute the relative frequencies of n-grams in the tokenized text
-
-    :param tokenized_text: List of tokenized words
-    :param n: The n-gram size
-    """
-    freq_dist = ComputeFrequencies(tokenized_text, n)
-    total_count = sum(freq_dist.values())
-    relative_freq_dist = {k: round(v / total_count, 10) for k, v in freq_dist.items()}
-    return relative_freq_dist
-
-#print(ComputeRelativeFrequencies(tokenization.tokenizeWithPadding(GetWholeText('/home/lea_k/language_detection_project/Language-Detection-Application/data/development/german')), 3))
-
-def ComputeRelativeFrequenciesForUnigrams(tokenized_text):
-    """
-    Compute the relative frequencies of unigrams in the tokenized text
-
-    :param tokenized_text: List of tokenized words
-    """
-    freq_dist = ComputeFrequenciesForUnigrams(tokenized_text)
-    total_count = sum(freq_dist.values())
-    relative_freq_dist = {k: round(v / total_count, 10) for k, v in freq_dist.items()}
-    return relative_freq_dist
-
 def SaveAsJSON(data, filename):
     """
     Save the computed frequencies as a JSON file
@@ -103,11 +77,4 @@ def SaveAsJSON(data, filename):
     with open(filename, 'w') as json_file:
         json.dump(data, json_file, indent=2)
 
-# Test the functions with a sample corpus
-corpus_root = '/home/lea_k/language_detection_project/Language-Detection-Application/data/development/german'
-tokenized_text = tokenizeWithPadding(GetWholeText(corpus_root))
-
-# Check if the sum of relative frequencies is 1 to ensure correctness of the computation
-rel_freqs = ComputeRelativeFrequencies(tokenized_text, 3)
-print(sum(rel_freqs.values()))
 

@@ -1,10 +1,11 @@
 import json
 import detection_helper
 from collections import defaultdict
+import numpy as np
 from tokenization import tokenizeWithPadding
 from n_gram import compute_n_gram
 
-class WordLevelLanguageDetector:
+class WordLevelLanguageDetectorCopy:
     """
     Clearly structured language detector based on out-of-place distance.
     The profiles consist of ranked lists of n-grams.
@@ -75,10 +76,12 @@ class WordLevelLanguageDetector:
                 """
 
     def _out_of_place_distance(self, word: str, lang: str) -> float:
-        """Computes the Out-of-Place-Distance for a single word in a given language."""
+        """
+        Computes the Out-of-Place-Distance for a single word in a given language.
+        """
         total_distance = 0.0
         ngram_counts = 0
-        
+
         for n in self.ngram_range:
             grams = compute_n_gram([word], n)
             ranks = self.rank_profiles[lang].get(n, {})
@@ -88,12 +91,17 @@ class WordLevelLanguageDetector:
             """
             # Get the penalty rank for this n-gram size
             K = self.penalty_rank[lang].get(n, 1000)
+
+            grams_arr = np.array(grams)
+            if grams_arr.size == 0:
+                continue
             
-            # Compute the distance for this n-gram type
-            distance = detection_helper.computeDistance(ranks, grams, K)
+            get_rank_vec = np.vectorize(lambda g: ranks.get(g, K))
+            ranks_arr = get_rank_vec(grams_arr)
+            distance = np.sum(ranks_arr)
             
             # Normalized by the number of n-grams
-            total_grams = len(grams)
+            total_grams = grams_arr.size
             if total_grams > 0:
                 total_distance += distance / total_grams
                 ngram_counts += 1
@@ -122,19 +130,18 @@ class WordLevelLanguageDetector:
         
         distances = detection_helper.distance_for_all_languages(word, self.languages, self._out_of_place_distance)
         sorted_langs = sorted(distances.items(), key=lambda kv: kv[1])
-        
+
         # Smallest distance = best language
         best_lang, best_score = sorted_langs[0]
         # Example: best_lang = ('english', 0.1234) out of e.g. [('english', 0.1234), ('german', 0.2345), ...]
         second_lang, second_score = detection_helper.ComputeSecondBestLanguage(sorted_langs)
-        
+
         # Ambiguous if the scores are too similar or too large
         if detection_helper.IsAmbiguous(best_score, second_score):
             return {'word': word, 'language': 'ambiguous', 'confidence': None}
-        
+
         confidence = detection_helper.ComputeConfidence(best_score, second_score)
         return {'word': word, 'language': best_lang, 'confidence': round(confidence, 2)}
-
 
     def _apply_context_smoothing(self, results: list[dict], window: int) -> list[dict]:
         """
@@ -201,52 +208,38 @@ class WordLevelLanguageDetector:
                         smoothed[i]['language'] = best_lang
                         smoothed[i]['confidence'] = min(0.8, 0.3 + language_votes[best_lang] * 0.1)
         return smoothed
-    
+
     def detect_text_languages(self, text: str, context_window=3) -> list[dict]:
-            """
-            Detect the language for each word in a text using the provided detection function.
-            :param text: The input text to analyze.
-            :param context_window: Number of words to consider for context smoothing.
-            :returns: A list of dictionaries with detected languages and confidence scores for each word.
-            Example:
-            [
-                {'word': 'Hello', 'language': 'english', 'confidence': 0.95},
-                {'word': 'Welt', 'language': 'german', 'confidence': 0.85},
-                ...
-            ]
-            """
-            tokens = tokenizeWithPadding(text)
-            results = detection_helper.DetectLanguageForEachWord(self.detect_word, tokens) 
-            return self._apply_context_smoothing(results, context_window)
+        """
+        Detect the language for each word in a text using the provided detection function.
+        :param text: The input text to analyze.
+        :param context_window: Number of words to consider for context smoothing.
+        :returns: A list of dictionaries with detected languages and confidence scores for each word.
+        Example:
+        [
+            {'word': 'Hello', 'language': 'english', 'confidence': 0.95},
+            {'word': 'Welt', 'language': 'german', 'confidence': 0.85},
+            ...
+        ]
+        """
+        tokens = tokenizeWithPadding(text)
+        results = detection_helper.DetectLanguageForEachWord(self.detect_word, tokens)
+        return self._apply_context_smoothing(results, context_window)
+    
+    def count_amount_of_languages(results: list[dict]) -> np.ndarray:
+        get_languages = np.array([])
+        for item in results:
+            get_languages = np.append(get_languages, item.get("language"))
+            
+        language, counts = np.unique(get_languages, return_counts=True)
+        result_dic = dict(zip(language, counts))
+        return result_dic
 
-    def get_language_summary(self, results: list[dict]) -> dict:
-        lang_counts = defaultdict(int) # count of words per language
-        total_confidence = defaultdict(float) #sum of confidence scores for each language
-        
-        for result in results:
-            lang = result['language']
-            if lang not in ['ambiguous', 'unknown']:
-                lang_counts[lang] += 1
-                """Example:
-                If results = [{'word': 'Hello', 'language': 'english', 'confidence': 0.95},
-                            {'word': 'Welt', 'language': 'german', 'confidence': 0.85},
-                            {'word': 'Ciao', 'language': 'italian', 'confidence': 0.75}]
-                then lang_counts = {'english': 1, 'german': 1, 'italian': 1}"""
-                total_confidence[lang] += result['confidence'] or 0
-                """
-                Example:
-                If results = [{'word': 'Hello', 'language': 'english', 'confidence': 0.95},
-                            {'word': 'Welt', 'language': 'german', 'confidence': 0.85},
-                            {'word': 'Ciao', 'language': 'italian', 'confidence': 0.75}]
-                then total_confidence = {'english': 0.95, 'german': 0.85, 'italian': 0.75}"""
+    dicto = [
+        {'word': 'Hello', 'language': 'english', 'confidence': 0.95},
+        {'word': 'Welt', 'language': 'german', 'confidence': 0.85},
+        {'word': 'Ciao', 'language': 'italian', 'confidence': 0.75},
+        {'word': 'Hallo', 'language': 'german', 'confidence': 0.90}
+    ]
 
-        summary = {}
-        total_words = sum(lang_counts.values()) # total number of words detected
-        for lang, count in lang_counts.items():
-            avg_confidence = total_confidence[lang] / count if count > 0 else 0.0
-            summary[lang] = {
-                'words': count,
-                'percentage': round((count / total_words) * 100, 1) if total_words > 0 else 0.0,
-                'avg_confidence': round(avg_confidence, 2)
-            }
-        return summary
+    print("Languages detected in the results:", count_amount_of_languages(dicto))
