@@ -43,7 +43,8 @@ def detect():
     results = detector.detect_text_languages(text)
     final = ReplaceProcessedText(results, text)
     colored_text = colorize_text(final)
-    return render_template("index.html", text=text, results=final, colored_text=colored_text)
+    amount_of_words_in_lang = detector.count_amount_of_languages(results)
+    return render_template("index.html", text=text, results=final, colored_text=colored_text, amount_of_words_in_lang=amount_of_words_in_lang)
 
 if __name__ == "__main__":  # Check if this script is being run directly
     app.run(debug=True, port=8000)  # Start the Flask development server with debug mode on port 8000

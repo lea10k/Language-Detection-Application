@@ -226,7 +226,7 @@ class WordLevelLanguageDetectorCopy:
         results = detection_helper.DetectLanguageForEachWord(self.detect_word, tokens)
         return self._apply_context_smoothing(results, context_window)
     
-    def count_amount_of_languages(results: list[dict]) -> np.ndarray:
+    def count_amount_of_languages(self, results: list[dict]) -> dict:
         get_languages = np.array([])
         for item in results:
             get_languages = np.append(get_languages, item.get("language"))
@@ -234,12 +234,3 @@ class WordLevelLanguageDetectorCopy:
         language, counts = np.unique(get_languages, return_counts=True)
         result_dic = dict(zip(language, counts))
         return result_dic
-
-    dicto = [
-        {'word': 'Hello', 'language': 'english', 'confidence': 0.95},
-        {'word': 'Welt', 'language': 'german', 'confidence': 0.85},
-        {'word': 'Ciao', 'language': 'italian', 'confidence': 0.75},
-        {'word': 'Hallo', 'language': 'german', 'confidence': 0.90}
-    ]
-
-    print("Languages detected in the results:", count_amount_of_languages(dicto))

@@ -26,7 +26,7 @@
                 </div>
             </div>
         </div>
-        <!-- Mittlere Card (Colored Text) -->
+        <!-- Middle Card (Colored Text) -->
         <div class="col-lg-6 col-md-7 col-12 mb-4 d-flex">
             <div class="card border-0 shadow-sm w-100 h-100">
                 <div class="card-body d-flex flex-column">
@@ -69,6 +69,19 @@
                             {% for item in results %}
                                 <li class="mb-2">
                                     <strong>{{ item.word }}</strong>: {{ item.language }} ({{ item.confidence }})
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-12 mb-4 d-flex">
+                <div class="card shadow-sm w-100 h-100">
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            {% for lang, count in amount_of_words_in_lang.items() %}
+                                <li class="mb-2">
+                                    <strong>{{ lang }}</strong>: {{ count }}
                                 </li>
                             {% endfor %}
                         </ul>
