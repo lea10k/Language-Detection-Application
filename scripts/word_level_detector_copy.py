@@ -226,11 +226,19 @@ class WordLevelLanguageDetectorCopy:
         results = detection_helper.DetectLanguageForEachWord(self.detect_word, tokens)
         return self._apply_context_smoothing(results, context_window)
     
-    def count_amount_of_languages(self, results: list[dict]) -> dict:
+    def count_amount_of_words_of_language(self, results: list[dict]) -> dict:
         get_languages = np.array([])
         for item in results:
             get_languages = np.append(get_languages, item.get("language"))
             
         language, counts = np.unique(get_languages, return_counts=True)
         result_dic = dict(zip(language, counts))
+        return result_dic
+    
+    def percentage_of_language(self, amount_words_of_language: dict) -> dict:
+        count_all_words = sum(amount_words_of_language.values())
+        result_dic = {}
+        for language in amount_words_of_language:
+            percentage = (amount_words_of_language[language] / count_all_words) * 100
+            result_dic[language] = f"{percentage}%"
         return result_dic

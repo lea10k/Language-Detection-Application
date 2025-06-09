@@ -88,6 +88,19 @@
                     </div>
                 </div>
             </div>
+            <div class="col-lg-3 col-md-4 col-12 mb-4 d-flex">
+                <div class="card shadow-sm w-100 h-100">
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            {% for lang, percentage in percentage_of_language.items() %}
+                                <li class="mb-2">
+                                    <strong>{{ lang }}</strong>: {{ percentage }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     {% endif %}
 </div>
