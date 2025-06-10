@@ -65,13 +65,22 @@
             <div class="col-lg-3 col-md-4 col-12 mb-4 d-flex">
                 <div class="card shadow-sm w-100 h-100">
                     <div class="card-body">
-                        <ul class="list-unstyled">
-                            {% for item in results %}
-                                <li class="mb-2">
-                                    <strong>{{ item.word }}</strong>: {{ item.language }} ({{ item.confidence }})
-                                </li>
-                            {% endfor %}
-                        </ul>
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Word &amp; Language</th>
+                                            <th>Confidence</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in results %}
+                                        <tr>
+                                            <td><strong>{{ item.word }}</strong>: {{ item.language }}</td>
+                                            <td>{{ item.confidence }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
                     </div>
                 </div>
             </div>
@@ -79,11 +88,22 @@
                 <div class="card shadow-sm w-100 h-100">
                     <div class="card-body">
                         <ul class="list-unstyled">
-                            {% for lang, count in amount_of_words_in_lang.items() %}
-                                <li class="mb-2">
-                                    <strong>{{ lang }}</strong>: {{ count }}
-                                </li>
-                            {% endfor %}
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Language</th>
+                                        <th>Word Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for lang, count in amount_of_words_in_lang.items() %}
+                                    <tr>
+                                        <td><strong>{{ lang }}</strong></td>
+                                        <td>{{ count }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </ul>
                     </div>
                 </div>
@@ -91,13 +111,22 @@
             <div class="col-lg-3 col-md-4 col-12 mb-4 d-flex">
                 <div class="card shadow-sm w-100 h-100">
                     <div class="card-body">
-                        <ul class="list-unstyled">
-                            {% for lang, percentage in percentage_of_language.items() %}
-                                <li class="mb-2">
-                                    <strong>{{ lang }}</strong>: {{ percentage }}
-                                </li>
-                            {% endfor %}
-                        </ul>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Language</th>
+                                    <th>Percentage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for lang, percentage in percentage_of_language.items() %}
+                                <tr>
+                                    <td><strong>{{ lang }}</strong></td>
+                                    <td>{{ percentage }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 import json
 import detection_helper
-from collections import defaultdict
 import numpy as np
+from collections import defaultdict
 from tokenization import tokenizeWithPadding
 from n_gram import compute_n_gram
 
@@ -217,8 +217,8 @@ class WordLevelLanguageDetectorCopy:
         :returns: A list of dictionaries with detected languages and confidence scores for each word.
         Example:
         [
-            {'word': 'Hello', 'language': 'english', 'confidence': 0.95},
-            {'word': 'Welt', 'language': 'german', 'confidence': 0.85},
+            {'word': 'hello', 'language': 'english', 'confidence': 0.95},
+            {'word': 'welt', 'language': 'german', 'confidence': 0.85},
             ...
         ]
         """
@@ -240,5 +240,6 @@ class WordLevelLanguageDetectorCopy:
         result_dic = {}
         for language in amount_words_of_language:
             percentage = (amount_words_of_language[language] / count_all_words) * 100
+            percentage = round(percentage, 2)
             result_dic[language] = f"{percentage}%"
         return result_dic
