@@ -36,7 +36,7 @@ def ReplaceProcessedText(results: list[dict], input_text: str) -> dict:
 
 language_colors = {
     "English": "#FF0000",
-    "German": "#00FF00",
+    "German": "#2DDF00",
     "Italian": "#0000FF",
     "Ambiguous": "#CCCCCC",
 }

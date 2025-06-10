@@ -206,7 +206,7 @@ class WordLevelLanguageDetectorCopy:
                     best_lang = max(language_votes, key=language_votes.get)
                     if language_votes[best_lang] >= 1.0:
                         smoothed[i]['language'] = best_lang
-                        smoothed[i]['confidence'] = min(0.8, 0.3 + language_votes[best_lang] * 0.1)
+                        smoothed[i]['confidence'] = round(min(0.8, 0.3 + language_votes[best_lang] * 0.1), 2)
         return smoothed
 
     def detect_text_languages(self, text: str, context_window=3) -> list[dict]:
