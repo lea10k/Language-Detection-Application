@@ -1,16 +1,14 @@
 import re
 
-def PostprocessText(text):
+def PostprocessText(text) -> str:
     """
-    Preprocess text for trilingual language detection (English, German, Italian).
+    Postprocess text for trilingual language detection (English, German, Italian).
     This function removes punctuation, standalone numbers, and keeps only letters relevant for
     EN/DE/IT languages, including apostrophes and spaces.
-    It also converts the text to lowercase and cleans up whitespace.
 
     :param text: Input text to preprocess
     :type text: str
-    :returns:
-        str: Preprocessed text ready for language detection.
+    :returns: str
     """
     # Normalize spacing before punctuation
     text = re.sub(r'\s+([.!?,:;])', r'\1', text)  # Remove space before punctuation
@@ -38,7 +36,7 @@ language_colors = {
     "English": "#FF0000",
     "German": "#2DDF00",
     "Italian": "#0000FF",
-    "Ambiguous": "#CCCCCC",
+    "Ambiguous": "#676767",
 }
 
 def colorize_text(results: dict) -> str:
@@ -46,6 +44,5 @@ def colorize_text(results: dict) -> str:
     for item in results:
         word = item["word"]
         color = language_colors.get(item["language"], "#000000")
-        # Erzeuge ein span-Element mit Inline-Style
         colored.append(f'<span style="color: {color};">{word}</span>')
     return " ".join(colored)

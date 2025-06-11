@@ -22,7 +22,7 @@ class WordLevelLanguageDetectorCopy:
             """
             Example:
             model_paths = {
-                'german': {}
+                'German': {}
                 ...
             }
             """
@@ -30,7 +30,7 @@ class WordLevelLanguageDetectorCopy:
             """
             Example:
             penalty_rank = {
-                'german': {},
+                'German': {},
                 ...
             }
             """
@@ -53,7 +53,7 @@ class WordLevelLanguageDetectorCopy:
                 """
                 Example:
                 rank_profiles = {
-                    'german': {
+                    'German': {
                         2: {'al': 1, '_ha': 2, ...},
                         3: {'_ha_': 1, 'all': 2, ...},
                         ...
@@ -66,7 +66,7 @@ class WordLevelLanguageDetectorCopy:
                 """
                 Example:
                 penalty_rank = {
-                    'german': {
+                    'German': {
                         2: 1001,  # If a n-gram is not found, it gets this penalty rank
                         3: 1001,
                         ...
@@ -117,13 +117,13 @@ class WordLevelLanguageDetectorCopy:
         Example:
         {
             'word': 'Hello',
-            'language': 'english',
+            'language': 'English',
             'confidence': 0.95
         }
         If the language cannot be determined, it returns:
         {
             'word': 'Hello',
-            'language': 'ambiguous',
+            'language': 'Ambiguous',
             'confidence': None
         }
         """
@@ -133,12 +133,12 @@ class WordLevelLanguageDetectorCopy:
 
         # Smallest distance = best language
         best_lang, best_score = sorted_langs[0]
-        # Example: best_lang = ('english', 0.1234) out of e.g. [('english', 0.1234), ('german', 0.2345), ...]
+        # Example: best_lang = ('English', 0.1234) out of e.g. [('English', 0.1234), ('German', 0.2345), ...]
         second_lang, second_score = detection_helper.ComputeSecondBestLanguage(sorted_langs)
 
         # Ambiguous if the scores are too similar or too large
         if detection_helper.IsAmbiguous(best_score, second_score):
-            return {'word': word, 'language': 'ambiguous', 'confidence': None}
+            return {'word': word, 'language': 'Ambiguous', 'confidence': None}
 
         confidence = detection_helper.ComputeConfidence(best_score, second_score)
         return {'word': word, 'language': best_lang, 'confidence': round(confidence, 2)}
@@ -149,9 +149,9 @@ class WordLevelLanguageDetectorCopy:
         :param results: List of dictionaries with detected languages and confidence scores for each word.
         Example:
         [
-            {'word': 'Hello', 'language': 'english', 'confidence': 0.95},
-            {'word': 'Welt', 'language': 'ambiguous', 'confidence': None},
-            {'word': 'Ciao', 'language': 'italian', 'confidence': 0.85},
+            {'word': 'Hello', 'language': 'English', 'confidence': 0.95},
+            {'word': 'Welt', 'language': 'Ambiguous', 'confidence': None},
+            {'word': 'Ciao', 'language': 'Italian', 'confidence': 0.85},
             ...
         ]
         
@@ -159,45 +159,45 @@ class WordLevelLanguageDetectorCopy:
         :returns: A list of dictionaries with smoothed detected languages and confidence scores for each word.
         Example:
         [
-            {'word': 'Hello', 'language': 'english', 'confidence': 0.95},
-            {'word': 'Welt', 'language': 'german', 'confidence': 0.85},
+            {'word': 'Hello', 'language': 'English', 'confidence': 0.95},
+            {'word': 'Welt', 'language': 'German', 'confidence': 0.85},
             ...
         ]
         
         """
-        # If there are no ambiguous words or only one word, return results as is
+        # If there are no Ambiguous words or only one word, return results as is
         if len(results) <= 1:
             return results
         
         # Create a copy of results to avoid modifying the original list
         smoothed = results.copy()
         
-        # Iterate over every word and check for ambiguous detections
-        # If a word is ambiguous, look at the context to determine the best language
+        # Iterate over every word and check for Ambiguous detections
+        # If a word is Ambiguous, look at the context to determine the best language
         for i, result in enumerate(results):
-            if result['language'] == 'ambiguous':
+            if result['language'] == 'Ambiguous':
                 # Get context window
                 start = max(0, i - window) # i = current index, window = number of words to consider before and after
                 end = min(len(results), i + window + 1)
                 context = results[start:i] + results[i+1:end] # context excluding the current word
                 """
                 Example:
-                If results = [{'word': 'Hello', 'language': 'english', 'confidence': 0.95},
-                            {'word': 'Welt', 'language': 'ambiguous', 'confidence': None},
-                            {'word': 'Ciao', 'language': 'italian', 'confidence': 0.85}]
-                and window = 1, then context = [{'word': 'Hello', 'language': 'english', 'confidence': 0.95},
-                            {'word': 'Ciao', 'language': 'italian', 'confidence': 0.85}]"""
+                If results = [{'word': 'Hello', 'language': 'English', 'confidence': 0.95},
+                            {'word': 'Welt', 'language': 'Ambiguous', 'confidence': None},
+                            {'word': 'Ciao', 'language': 'Italian', 'confidence': 0.85}]
+                and window = 1, then context = [{'word': 'Hello', 'language': 'English', 'confidence': 0.95},
+                            {'word': 'Ciao', 'language': 'Italian', 'confidence': 0.85}]"""
                 
                 language_votes = defaultdict(float) 
                 for ctx in context:
-                    # For each context word that is not ambiguous or unknown, 
+                    # For each context word that is not Ambiguous or unknown, 
                     # add its confidence to the given language vote.
-                    if ctx['language'] not in ['ambiguous', 'unknown'] and ctx['confidence']:
+                    if ctx['language'] not in ['Ambiguous', 'unknown'] and ctx['confidence']:
                         language_votes[ctx['language']] += ctx['confidence']
                         """Example:
-                        If context = [{'word': 'Hello', 'language': 'english', 'confidence': 0.95},
-                                      {'word': 'Ciao', 'language': 'italian', 'confidence': 0.85}]
-                        then language_votes = {'english': 0.95, 'italian': 0.85}"""
+                        If context = [{'word': 'Hello', 'language': 'English', 'confidence': 0.95},
+                                      {'word': 'Ciao', 'language': 'Italian', 'confidence': 0.85}]
+                        then language_votes = {'English': 0.95, 'Italian': 0.85}"""
                 
                 # If there are any votes, determine the best language based on the highest confidence
                 # If the best language has a confidence of at least 1.0, assign it to the current word
@@ -217,8 +217,8 @@ class WordLevelLanguageDetectorCopy:
         :returns: A list of dictionaries with detected languages and confidence scores for each word.
         Example:
         [
-            {'word': 'hello', 'language': 'english', 'confidence': 0.95},
-            {'word': 'welt', 'language': 'german', 'confidence': 0.85},
+            {'word': 'hello', 'language': 'English', 'confidence': 0.95},
+            {'word': 'welt', 'language': 'German', 'confidence': 0.85},
             ...
         ]
         """
