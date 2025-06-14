@@ -18,12 +18,13 @@ def PostprocessText(text) -> str:
     text = text.replace('‘', '').replace('’', '')
 
     # Keep only letters, apostrophes, underscores, spaces
-    text = re.sub(r'[^a-zA-ZäöüßàèéìíòóùúçÀÈÉÌÍÒÓÙÚÇ\'_\s]', '', text)
+    text = re.sub(r'[^a-zA-ZäöüßàèéìíòóùúçÀÈÉÌÍÒÓÙÚÇ\'_\s]', ' ', text)
     
     # Clean up multiple spaces
     text = re.sub(r'\s+', ' ', text).strip()
     
     return text
+
 
 def ReplaceProcessedText(results: list[dict], input_text: str) -> dict:
     processed_text = PostprocessText(input_text).split()

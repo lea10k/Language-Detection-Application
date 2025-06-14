@@ -1,7 +1,7 @@
 import sys
 from flask import Flask, request, render_template  # Import Flask framework and required modules
 sys.path.append('/home/lea_k/language_detection_project/Language-Detection-Application/scripts')  # Add the scripts directory to the system path for module imports
-from word_level_detector_copy import WordLevelLanguageDetectorCopy
+from word_level_detector import WordLevelLanguageDetector
 from postprocessing import ReplaceProcessedText
 from postprocessing import colorize_text  
 
@@ -31,7 +31,7 @@ model_paths = {
     }
 }
 
-detector = WordLevelLanguageDetectorCopy(model_paths)
+detector = WordLevelLanguageDetector(model_paths)
 
 @app.route("/", methods=["GET"])  # Define route for the homepage, accepts GET requests
 def index():
