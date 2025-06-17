@@ -29,7 +29,7 @@ Here is a summary of the main scripts in the `scripts/` directory (only the firs
 * **[preprocessing.py](https://github.com/lea10k/Language-Detection-Application/blob/main/scripts/preprocessing.py)**: Cleans and prepares input text for further analysis and detection.
 * **[tokenization.py](https://github.com/lea10k/Language-Detection-Application/blob/main/scripts/tokenization.py)**: Splits input text into tokens (words, characters, etc.) required for detection.
 * **[word\_level\_detector.py](https://github.com/lea10k/Language-Detection-Application/blob/main/scripts/word_level_detector.py)**: Performs language detection at the word level, likely using dictionaries or statistical rules.
-* **[word\_level\_detector\_copy.py](https://github.com/lea10k/Language-Detection-Application/blob/main/scripts/word_level_detector_copy.py)**: A variant or backup of the main word-level detector script.
+* **[word\_level\_detector\_copy.py](https://github.com/lea10k/Language-Detection-Application/blob/main/scripts/word_level_detector_copy.py)**: A variant or backup of the main word-level detector script. **Currently used in app.py**
 
 *Note: The above list may be incomplete. To see the full set of scripts, visit the [scripts directory](https://github.com/lea10k/Language-Detection-Application/tree/main/scripts) on GitHub.*
 
