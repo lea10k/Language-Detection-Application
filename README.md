@@ -32,3 +32,39 @@ Here is a summary of the main scripts in the `scripts/` directory (only the firs
 - **[word_level_detector_copy.py](https://github.com/lea10k/Language-Detection-Application/blob/main/scripts/word_level_detector_copy.py)**: A variant or backup of the main word-level detector script.
 
 *Note: The above list may be incomplete. To see the full set of scripts, visit the [scripts directory](https://github.com/lea10k/Language-Detection-Application/tree/main/scripts) on GitHub.*
+
+## Out-of-Place Distance for Word-Level Language Detection
+
+This application uses the Out-of-Place Distance (OoP) method to classify the language of individual words. For each word to be classified, the OoP distance is calculated against the language profiles of all supported languages. The language with the lowest distance is considered the most likely language of the word.
+
+### Implementation Details
+
+1. **N-Gram Profiles:**  
+   Each language has a profile consisting of a ranked list of N-grams (by default, N = 2, 3, 4, 5).
+
+2. **OoP Distance Calculation:**  
+   The input word is split into N-grams. For each N-gram, its position (rank) in the profile of each language is checked:
+   - If the N-gram exists in the profile, its rank is used.
+   - If not found, a high penalty rank (typically 1000) is used.
+
+3. **Distance Normalization:**  
+   The sum of the ranks for all N-grams is divided by the number of N-grams (normalization).
+
+4. **Multiple N-Gram Types:**  
+   OoP distances are calculated for all configured N-gram lengths. The final result is the average of these values.
+
+5. **Language Selection:**  
+   The language with the lowest average OoP distance is assigned to the word.
+
+### Example (Simplified):
+
+- Word: “Hallo”
+- Languages: English, German, Italian
+- The OoP distance is computed for each language.
+- The language with the smallest distance is chosen.
+
+### Code Implementation
+
+The logic is implemented in the `_out_of_place_distance(word, lang)` method of the `WordLevelLanguageDetector` class (`scripts/word_level_detector.py`).  
+The actual word detection step then calls the OoP distance computation for all available languages and selects the best match (`detect_word`).
+
