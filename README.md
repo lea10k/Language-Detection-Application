@@ -32,7 +32,3 @@ Here is a summary of the main scripts in the `scripts/` directory (only the firs
 - **[word_level_detector_copy.py](https://github.com/lea10k/Language-Detection-Application/blob/main/scripts/word_level_detector_copy.py)**: A variant or backup of the main word-level detector script.
 
 *Note: The above list may be incomplete. To see the full set of scripts, visit the [scripts directory](https://github.com/lea10k/Language-Detection-Application/tree/main/scripts) on GitHub.*
-
----
-
-Let me know if you want a more detailed description of any specific script or file!
