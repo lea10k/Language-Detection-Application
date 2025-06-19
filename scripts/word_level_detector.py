@@ -3,7 +3,7 @@ import detection_helper
 import numpy as np
 from collections import defaultdict
 from tokenization import tokenizeWithPadding
-from n_gram import compute_n_gram
+from n_gram_computation import compute_n_gram
 from typing import Dict, List, Tuple, Optional, Union
 
 

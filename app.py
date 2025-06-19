@@ -1,11 +1,11 @@
 import sys
-from flask import Flask, request, render_template  # Import Flask framework and required modules
-sys.path.append('/home/lea_k/language_detection_project/Language-Detection-Application/scripts')  # Add the scripts directory to the system path for module imports
+from flask import Flask, request, render_template  
+sys.path.append('/home/lea_k/language_detection_project/Language-Detection-Application/scripts')  
 from word_level_detector import WordLevelLanguageDetector
 from website_postprocessing import replace_processed_text
 from website_postprocessing import colorize_text  
 
-app = Flask(__name__)  # Create a new Flask web application instance
+app = Flask(__name__)  
 
 model_paths = {
     'German': {
@@ -48,5 +48,5 @@ def detect():
     return render_template("index.html", text=text, results=final, colored_text=colored_text, amount_of_words_in_lang=amount_of_words_in_lang, 
                            percentage_of_language=percentage_of_language)
 
-if __name__ == "__main__":  # Check if this script is being run directly
-    app.run(debug=True, port=8000)  # Start the Flask development server with debug mode on port 8000
+if __name__ == "__main__": 
+    app.run(debug=True, port=8000)  

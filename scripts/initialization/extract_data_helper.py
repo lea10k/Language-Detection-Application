@@ -1,5 +1,5 @@
 import json
-from n_gram import compute_n_gram
+from n_gram_computation import compute_n_gram
 from nltk.corpus import PlaintextCorpusReader
 from nltk.probability import FreqDist
 
