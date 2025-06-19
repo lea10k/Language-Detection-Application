@@ -1,11 +1,10 @@
 import json
 import detection_helper
 import numpy as np
-from collections import defaultdict
+import confidence
 from tokenization import tokenizeWithPadding
 from n_gram_computation import compute_n_gram
 from typing import Dict, List, Tuple, Optional, Union
-
 
 class WordLevelLanguageDetector:
     """
@@ -30,6 +29,8 @@ class WordLevelLanguageDetector:
     BASE_SMOOTHED_CONFIDENCE = 0.3
     CONFIDENCE_SCALING_FACTOR = 0.1
     MAX_SMOOTHED_CONFIDENCE = 0.8
+    
+    #--- Initialization ---
     
     def __init__(self, model_paths: Dict[str, Dict[str, str]], ngram_range: Tuple[int, ...] = DEFAULT_NGRAM_RANGE):
         """
@@ -86,9 +87,9 @@ class WordLevelLanguageDetector:
         """
         
         # Load n-gram profiles from provided paths
-        self._load_language_models(model_paths)
+        self.load_language_models(model_paths)
     
-    def _load_language_models(self, model_paths: Dict[str, Dict[str, str]]) -> None:
+    def load_language_models(self, model_paths: Dict[str, Dict[str, str]]) -> None:
         """
         Load n-gram profiles from provided file paths for all languages.
         
@@ -96,9 +97,9 @@ class WordLevelLanguageDetector:
             model_paths: Dictionary mapping language names to their n-gram model file paths
         """
         for language in self.languages:
-            self._load_single_language_model(language, model_paths[language])
+            self.load_single_language_model(language, model_paths[language])
     
-    def _load_single_language_model(self, language: str, ngram_files: Dict[str, str]) -> None:
+    def load_single_language_model(self, language: str, ngram_files: Dict[str, str]) -> None:
         """
         Load n-gram model for a single language.
         
@@ -111,12 +112,12 @@ class WordLevelLanguageDetector:
         self.penalty_rank[language] = {}
         
         for file_key, file_path in ngram_files.items():
-            if self._is_valid_ngram_file(file_key):
-                ngram_size = self._extract_ngram_size(file_key)
+            if self.is_valid_ngram_file(file_key):
+                ngram_size = self.extract_ngram_size(file_key)
                 if ngram_size in self.ngram_range:
-                    self._load_ngram_file(language, ngram_size, file_path)
+                    self.load_ngram_file(language, ngram_size, file_path)
     
-    def _is_valid_ngram_file(self, file_key: str) -> bool:
+    def is_valid_ngram_file(self, file_key: str) -> bool:
         """
         Check if the file key represents a valid n-gram file.
         
@@ -128,7 +129,7 @@ class WordLevelLanguageDetector:
         """
         return file_key.endswith("gram")
     
-    def _extract_ngram_size(self, file_key: str) -> int:
+    def extract_ngram_size(self, file_key: str) -> int:
         """
         Extract n-gram size from file key.
         
@@ -140,7 +141,7 @@ class WordLevelLanguageDetector:
         """
         return int(file_key[:-4])  # Remove 'gram' suffix and convert to int
     
-    def _load_ngram_file(self, language: str, ngram_size: int, file_path: str) -> None:
+    def load_ngram_file(self, language: str, ngram_size: int, file_path: str) -> None:
         """
         Load a single n-gram file and create rank mappings.
         
@@ -150,17 +151,17 @@ class WordLevelLanguageDetector:
             file_path: Path to the n-gram frequency file
         """
         # Load n-gram frequencies from JSON file
-        frequency_map = self._read_ngram_frequencies(file_path)
+        frequency_map = self.read_ngram_frequencies(file_path)
         
         # Sort n-grams by frequency and create rank mapping in descending order
-        rank_map = self._create_rank_mapping(frequency_map)
+        rank_map = self.create_rank_mapping(frequency_map)
         
         # Store rank mapping and penalty rank for this language and n-gram size
         self.rank_profiles[language][ngram_size] = rank_map
         # Penalty-Rank: One rank higher than the highest n-gram rank
         self.penalty_rank[language][ngram_size] = len(rank_map) + 1
     
-    def _read_ngram_frequencies(self, file_path: str) -> Dict[str, int]:
+    def read_ngram_frequencies(self, file_path: str) -> Dict[str, int]:
         """
         Read n-gram frequencies from JSON file.
         
@@ -172,8 +173,10 @@ class WordLevelLanguageDetector:
         """
         with open(file_path, 'r', encoding='utf-8') as file:
             return json.load(file)
+        
+    #--- Out-of-Place Distance Logic ---
     
-    def _create_rank_mapping(self, frequency_map: Dict[str, int]) -> Dict[str, int]:
+    def create_rank_mapping(self, frequency_map: Dict[str, int]) -> Dict[str, int]:
         """
         Create rank mapping from frequency data.
         
@@ -187,7 +190,7 @@ class WordLevelLanguageDetector:
         sorted_ngrams = sorted(frequency_map.items(), key=lambda item: item[1], reverse=True)
         return detection_helper.create_rank_map(sorted_ngrams)
     
-    def _out_of_place_distance(self, word: str, language: str) -> float:
+    def out_of_place_distance(self, word: str, language: str) -> float:
         """
         Compute the Out-of-Place-Distance for a single word in a given language.
         
@@ -207,7 +210,7 @@ class WordLevelLanguageDetector:
         
         # Calculate distance for each n-gram size
         for ngram_size in self.ngram_range:
-            distance = self._compute_ngram_distance(word, language, ngram_size)
+            distance = self.compute_ngram_distance(word, language, ngram_size)
             if distance is not None:
                 total_distance += distance
                 ngram_type_count += 1
@@ -215,7 +218,7 @@ class WordLevelLanguageDetector:
         # Average over all n-gram types (if multiple n are used)
         return total_distance / ngram_type_count if ngram_type_count > 0 else float('inf')
     
-    def _compute_ngram_distance(self, word: str, language: str, ngram_size: int) -> Optional[float]:
+    def compute_ngram_distance(self, word: str, language: str, ngram_size: int) -> Optional[float]:
         """
         Compute distance for a specific n-gram size.
         
@@ -244,13 +247,13 @@ class WordLevelLanguageDetector:
         penalty_rank = self.penalty_rank[language].get(ngram_size, 1000)
         
         # Get ranks for all n-grams and compute total distance
-        ngram_ranks = self._get_ngram_ranks(ngrams, rank_mapping, penalty_rank)
+        ngram_ranks = self.get_ngram_ranks(ngrams, rank_mapping, penalty_rank)
         total_distance = np.sum(ngram_ranks)
         
         # Normalized by the number of n-grams
         return total_distance / ngrams_array.size
     
-    def _get_ngram_ranks(self, ngrams: List[str], rank_mapping: Dict[str, int], penalty_rank: int) -> np.ndarray:
+    def get_ngram_ranks(self, ngrams: List[str], rank_mapping: Dict[str, int], penalty_rank: int) -> np.ndarray:
         """
         Get ranks for a list of n-grams using vectorized operations.
         
@@ -290,8 +293,8 @@ class WordLevelLanguageDetector:
             }
         """
         # Compute distances to all languages
-        language_distances = self._compute_all_language_distances(word)
-        sorted_languages = self._sort_languages_by_distance(language_distances)
+        language_distances = self.compute_all_language_distances(word)
+        sorted_languages = self.sort_languages_by_distance(language_distances)
         
         # Smallest distance = best language
         best_language, best_score = sorted_languages[0]
@@ -300,14 +303,14 @@ class WordLevelLanguageDetector:
         second_language, second_score = detection_helper.compute_second_best_language(sorted_languages)
         
         # Ambiguous if the scores are too similar or too large
-        if self._is_detection_ambiguous(best_score, second_score):
-            return self._create_ambiguous_result(word)
+        if self.is_detection_ambiguous(best_score, second_score):
+            return self.create_ambiguous_result(word)
         
         # Calculate confidence based on score difference
         confidence = detection_helper.compute_confidence(best_score, second_score)
-        return self._create_detection_result(word, best_language, confidence)
+        return self.create_detection_result(word, best_language, confidence)
     
-    def _compute_all_language_distances(self, word: str) -> Dict[str, float]:
+    def compute_all_language_distances(self, word: str) -> Dict[str, float]:
         """
         Compute out-of-place distances for all languages.
         
@@ -319,10 +322,10 @@ class WordLevelLanguageDetector:
         """
         distances = {}
         for language in self.languages:
-            distances[language] = self._out_of_place_distance(word, language)
+            distances[language] = self.out_of_place_distance(word, language)
         return distances
     
-    def _sort_languages_by_distance(self, distances: Dict[str, float]) -> List[Tuple[str, float]]:
+    def sort_languages_by_distance(self, distances: Dict[str, float]) -> List[Tuple[str, float]]:
         """
         Sort languages by their distance scores (ascending).
         
@@ -334,7 +337,7 @@ class WordLevelLanguageDetector:
         """
         return sorted(distances.items(), key=lambda item: item[1])
     
-    def _is_detection_ambiguous(self, best_score: float, second_score: float) -> bool:
+    def is_detection_ambiguous(self, best_score: float, second_score: float) -> bool:
         """
         Check if detection result is ambiguous based on scores.
         
@@ -347,7 +350,7 @@ class WordLevelLanguageDetector:
         """
         return detection_helper.is_ambiguous(best_score, second_score)
     
-    def _create_ambiguous_result(self, word: str) -> Dict[str, Union[str, None]]:
+    def create_ambiguous_result(self, word: str) -> Dict[str, Union[str, None]]:
         """
         Create result dictionary for ambiguous detection.
         
@@ -363,7 +366,7 @@ class WordLevelLanguageDetector:
             'confidence': None
         }
     
-    def _create_detection_result(self, word: str, language: str, confidence: float) -> Dict[str, Union[str, float]]:
+    def create_detection_result(self, word: str, language: str, confidence: float) -> Dict[str, Union[str, float]]:
         """
         Create result dictionary for successful detection.
         
@@ -381,7 +384,9 @@ class WordLevelLanguageDetector:
             'confidence': round(confidence, 2)
         }
     
-    def _apply_context_smoothing(self, results: List[Dict], window: int) -> List[Dict]:
+    #--- Smoothing ---
+    
+    def apply_context_smoothing(self, results: List[Dict], window: int) -> List[Dict]:
         """
         Smooth ambiguous language detections using surrounding context.
         
@@ -402,12 +407,6 @@ class WordLevelLanguageDetector:
                    
         Returns:
             List of results with smoothed language assignments for ambiguous words
-            Example:
-            [
-                {'word': 'Hello', 'language': 'English', 'confidence': 0.95},
-                {'word': 'Welt', 'language': 'German', 'confidence': 0.85},
-                ...
-            ]
         """
         # If there are no words that could benefit from context, return results as is
         if len(results) <= 1:
@@ -419,36 +418,35 @@ class WordLevelLanguageDetector:
         # Iterate over every word and check for Ambiguous detections
         # If a word is Ambiguous, look at the context to determine the best language
         for current_index in range(len(results)):
-            if self._is_word_ambiguous(results[current_index]):
+            if self.is_word_ambiguous(results[current_index]):
                 # Extract surrounding words as context
-                context_words = self._extract_context_window(results, current_index, window)
+                context_words = self.extract_context_window(results, current_index, window)
                 
                 # Calculate language votes based on context
-                language_votes = self._calculate_language_votes(context_words)
+                language_votes = confidence.calculate_language_votes(context_words, self.is_valid_vote)
+                print(language_votes)
                 
                 # Apply smoothing if confidence threshold is met
-                if self._should_apply_smoothing(language_votes):
-                    best_language = self._get_best_voted_language(language_votes)
-                    smoothed_confidence = self._calculate_smoothed_confidence(language_votes[best_language])
-                    
+                if confidence.should_apply_smoothing(language_votes, self.MIN_CONFIDENCE_THRESHOLD):
+                    best_language = self.get_best_voted_language(language_votes)
+                    smoothed_confidence = confidence.calculate_smoothed_confidence(language_votes[best_language], self.BASE_SMOOTHED_CONFIDENCE, 
+                                                                                          self.MAX_SMOOTHED_CONFIDENCE, self.CONFIDENCE_SCALING_FACTOR)
                     # Update the word's detection result
-                    self._update_word_detection(smoothed_results[current_index], best_language, smoothed_confidence)
-        
+                    self.update_word_detection(smoothed_results[current_index], best_language, smoothed_confidence)
         return smoothed_results
     
-    def _is_word_ambiguous(self, word_result: Dict) -> bool:
+    def is_word_ambiguous(self, word_result: Dict) -> bool:
         """
         Check if a word detection result is ambiguous.
         
         Args:
             word_result: Dictionary containing word detection result
-            
         Returns:
             True if the word was detected as ambiguous
         """
         return word_result['language'] == self.AMBIGUOUS_LANGUAGE
     
-    def _extract_context_window(self, results: List[Dict], current_index: int, window: int) -> List[Dict]:
+    def extract_context_window(self, results: List[Dict], current_index: int, window: int) -> List[Dict]:
         """
         Extract context words around the current word position.
         
@@ -477,35 +475,9 @@ class WordLevelLanguageDetector:
         
         return before_current + after_current
     
-    def _calculate_language_votes(self, context_words: List[Dict]) -> Dict[str, float]:
-        """
-        Calculate confidence votes for each language based on context words.
-        
-        For each context word that is not Ambiguous or unknown, 
-        add its confidence to the given language vote.
-        
-        Args:
-            context_words: List of context word detection results
-            
-        Returns:
-            Dictionary mapping language names to their total confidence scores
-            
-            Example:
-            If context = [{'word': 'Hello', 'language': 'English', 'confidence': 0.95},
-                          {'word': 'Ciao', 'language': 'Italian', 'confidence': 0.85}]
-            then language_votes = {'English': 0.95, 'Italian': 0.85}
-        """
-        language_votes = defaultdict(float)
-        
-        for word_result in context_words:
-            if self._is_valid_vote(word_result):
-                language = word_result['language']
-                confidence = word_result['confidence']
-                language_votes[language] += confidence
-        
-        return dict(language_votes)
     
-    def _is_valid_vote(self, word_result: Dict) -> bool:
+    
+    def is_valid_vote(self, word_result: Dict) -> bool:
         """
         Check if a word result can contribute to language voting.
         
@@ -521,27 +493,8 @@ class WordLevelLanguageDetector:
         invalid_languages = {self.AMBIGUOUS_LANGUAGE, self.UNKNOWN_LANGUAGE}
         return language not in invalid_languages and confidence is not None
     
-    def _should_apply_smoothing(self, language_votes: Dict[str, float]) -> bool:
-        """
-        Determine if smoothing should be applied based on vote confidence.
-        
-        If there are any votes, determine the best language based on the highest confidence.
-        If the best language has a confidence of at least MIN_CONFIDENCE_THRESHOLD, 
-        smoothing should be applied.
-        
-        Args:
-            language_votes: Dictionary of language confidence scores
-            
-        Returns:
-            True if the best language has sufficient confidence for smoothing
-        """
-        if not language_votes:
-            return False
-        
-        highest_confidence = max(language_votes.values())
-        return highest_confidence >= self.MIN_CONFIDENCE_THRESHOLD
     
-    def _get_best_voted_language(self, language_votes: Dict[str, float]) -> str:
+    def get_best_voted_language(self, language_votes: Dict[str, float]) -> str:
         """
         Get the language with the highest confidence score.
         
@@ -552,25 +505,9 @@ class WordLevelLanguageDetector:
             Language name with the highest vote score
         """
         return max(language_votes, key=language_votes.get)
+
     
-    def _calculate_smoothed_confidence(self, vote_confidence: float) -> float:
-        """
-        Calculate a smoothed confidence score based on context voting.
-        
-        The smoothed confidence is calculated as:
-        min(MAX_SMOOTHED_CONFIDENCE, BASE_SMOOTHED_CONFIDENCE + vote_confidence * SCALING_FACTOR)
-        
-        Args:
-            vote_confidence: Total confidence from context voting
-            
-        Returns:
-            Smoothed confidence score between 0 and MAX_SMOOTHED_CONFIDENCE
-        """
-        raw_confidence = self.BASE_SMOOTHED_CONFIDENCE + (vote_confidence * self.CONFIDENCE_SCALING_FACTOR)
-        smoothed_confidence = min(self.MAX_SMOOTHED_CONFIDENCE, raw_confidence)
-        return round(smoothed_confidence, 2)
-    
-    def _update_word_detection(self, word_result: Dict, language: str, confidence: float) -> None:
+    def update_word_detection(self, word_result: Dict, language: str, confidence: float) -> None:
         """
         Update a word detection result with new language and confidence.
         
@@ -581,6 +518,7 @@ class WordLevelLanguageDetector:
         """
         word_result['language'] = language
         word_result['confidence'] = confidence
+    
     
     def detect_text_languages(self, text: str, context_window: int = DEFAULT_CONTEXT_WINDOW) -> List[Dict]:
         """
@@ -606,67 +544,7 @@ class WordLevelLanguageDetector:
         detection_results = detection_helper.detect_language_for_each_word(self.detect_word, tokens)
         
         # Apply context smoothing to resolve ambiguous detections
-        return self._apply_context_smoothing(detection_results, context_window)
+        return self.apply_context_smoothing(detection_results, context_window)
+
     
-    def count_amount_of_words_of_language(self, results: List[Dict]) -> Dict[str, int]:
-        """
-        Count the number of words detected for each language.
-        
-        Args:
-            results: List of word detection results
-            
-        Returns:
-            Dictionary mapping language names to word counts
-        """
-        languages = self._extract_languages_from_results(results)
-        unique_languages, counts = np.unique(languages, return_counts=True)
-        return dict(zip(unique_languages, counts))
     
-    def _extract_languages_from_results(self, results: List[Dict]) -> np.ndarray:
-        """
-        Extract language labels from detection results.
-        
-        Args:
-            results: List of detection result dictionaries
-            
-        Returns:
-            NumPy array of language labels
-        """
-        languages = np.array([])
-        for result in results:
-            language = result.get("language")
-            languages = np.append(languages, language)
-        return languages
-    
-    def percentage_of_language(self, language_word_counts: Dict[str, int]) -> Dict[str, str]:
-        """
-        Calculate percentage distribution of languages.
-        
-        Args:
-            language_word_counts: Dictionary mapping languages to word counts
-            
-        Returns:
-            Dictionary mapping languages to percentage strings (e.g., "25.5%")
-        """
-        total_words = sum(language_word_counts.values())
-        
-        percentage_results = {}
-        for language, word_count in language_word_counts.items():
-            percentage = self._calculate_percentage(word_count, total_words)
-            percentage_results[language] = f"{percentage}%"
-        
-        return percentage_results
-    
-    def _calculate_percentage(self, part: int, total: int) -> float:
-        """
-        Calculate percentage and round to 2 decimal places.
-        
-        Args:
-            part: Partial count (numerator)
-            total: Total count (denominator)
-            
-        Returns:
-            Percentage value rounded to 2 decimal places
-        """
-        percentage = (part / total) * 100
-        return round(percentage, 2)

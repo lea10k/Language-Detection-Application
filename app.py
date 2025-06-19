@@ -2,8 +2,10 @@ import sys
 from flask import Flask, request, render_template  
 sys.path.append('/home/lea_k/language_detection_project/Language-Detection-Application/scripts')  
 from word_level_detector import WordLevelLanguageDetector
-from website_postprocessing import replace_processed_text
-from website_postprocessing import colorize_text  
+from website_functions import replace_processed_text, colorize_text, count_amount_of_words_of_language
+import website_functions
+
+
 
 app = Flask(__name__)  
 
@@ -43,8 +45,8 @@ def detect():
     results = detector.detect_text_languages(text)
     final = replace_processed_text(results, text)
     colored_text = colorize_text(final)
-    amount_of_words_in_lang = detector.count_amount_of_words_of_language(results)
-    percentage_of_language = detector.percentage_of_language(amount_of_words_in_lang)
+    amount_of_words_in_lang = count_amount_of_words_of_language(results)
+    percentage_of_language = website_functions.percentage_of_language(amount_of_words_in_lang)
     return render_template("index.html", text=text, results=final, colored_text=colored_text, amount_of_words_in_lang=amount_of_words_in_lang, 
                            percentage_of_language=percentage_of_language)
 
