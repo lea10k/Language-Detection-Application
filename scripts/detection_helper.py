@@ -18,7 +18,7 @@ def compute_distance(ranks, grams, K):
     Compute the distance between the n-grams of a text and the n-gram profile of a language.
     
     Example:
-    If the ranks dictionary is {'al': 1, '_ha': 2, ...} and grams are ['al', '_ha', 'xyz'],
+    If the ranks dictionary is {'al': 1, '_ha': 2, ...} and grams is ['al', '_ha', 'xyz'],
     the function will return 1 + 2 + K (where K is the penalty rank for 'xyz' since it is not found in ranks).
     
     :param ranks: A dictionary mapping n-grams to their ranks in the language profile.
@@ -72,16 +72,21 @@ def compute_confidence(best_score, second_score):
 
 def is_ambiguous(best_score, second_score, ambiguity_margin=0.25):
     """
-    Check if the language detection is ambiguous based on the best and second best scores.
-    
-    :param best_score: The score of the best language.
-    :param second_score: The score of the second best language.
-    :param ambiguity_margin: The margin to determine if the detection is ambiguous.
-    :returns: True if the detection is ambiguous, False otherwise.
+    Check if the language detection result is ambiguous based on the best and second best distance scores.
+
+    :param best_score: The lowest (i.e., best) distance score among all candidate languages.
+        This corresponds to the language profile that most closely matches the input (smaller is better).
+    :param second_score: The second lowest distance score among the candidate languages.
+        This is the next best matching language after the best.
+    :param ambiguity_margin: The threshold for ambiguity, given as a relative margin (default: 0.25).
+        If the relative difference between the best and second-best scores is smaller than this margin,
+        the detection is considered ambiguous.
+    :returns: True if the detection is ambiguous (i.e., the top two scores are very close), False otherwise.
     """
     if second_score < float('inf') and (second_score - best_score) / best_score < ambiguity_margin:
-            return True
+        return True
     return False
+
 
 def detect_language_for_each_word(detect_Word_func, words):
     """

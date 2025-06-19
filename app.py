@@ -2,8 +2,8 @@ import sys
 from flask import Flask, request, render_template  # Import Flask framework and required modules
 sys.path.append('/home/lea_k/language_detection_project/Language-Detection-Application/scripts')  # Add the scripts directory to the system path for module imports
 from word_level_detector import WordLevelLanguageDetector
-from postprocessing import ReplaceProcessedText
-from postprocessing import colorize_text  
+from website_postprocessing import replace_processed_text
+from website_postprocessing import colorize_text  
 
 app = Flask(__name__)  # Create a new Flask web application instance
 
@@ -41,7 +41,7 @@ def index():
 def detect():
     text = request.form["submission"]  # Get the value of the 'submission' field from the form data
     results = detector.detect_text_languages(text)
-    final = ReplaceProcessedText(results, text)
+    final = replace_processed_text(results, text)
     colored_text = colorize_text(final)
     amount_of_words_in_lang = detector.count_amount_of_words_of_language(results)
     percentage_of_language = detector.percentage_of_language(amount_of_words_in_lang)
