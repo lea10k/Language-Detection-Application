@@ -1,3 +1,5 @@
+import math
+
 def create_rank_map(sorted_items):
     """
     Helper function to create a rank map from sorted items.
@@ -104,3 +106,11 @@ def detect_language_for_each_word(detect_Word_func, words):
     ]
     """
     return [detect_Word_func(token) for token in words]
+
+def is_unknown(best_score, word, unknown_string):
+    if math.isinf(best_score):
+            return {
+                'word': word,
+                'language': unknown_string,
+                'confidence': None
+            }

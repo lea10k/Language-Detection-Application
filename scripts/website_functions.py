@@ -12,6 +12,7 @@ language_colors = {
     "German": "#2DDF00",
     "Italian": "#0000FF",
     "Ambiguous": "#676767",
+    "Unknown": "#000000"
 }
 
 def colorize_text(results: dict) -> str:

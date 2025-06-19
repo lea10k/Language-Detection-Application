@@ -29,12 +29,15 @@ class WordLevelLanguageDetector(LanguageModelLoader, LanguageDistanceCalculator,
     def detect_word(self, word: str) -> Dict[str, Union[str, float, None]]:
         distances = self.compute_all_language_distances(word)
         sorted_langs = self.sort_languages_by_distance(distances)
-        best, best_score = sorted_langs[0]
-        second, second_score = detection_helper.compute_second_best_language(sorted_langs)
+        best_lang, best_score = sorted_langs[0]
+        
+        detection_helper.is_unknown(best_score, word, self.UNKNOWN_LANGUAGE)
+        
+        second_lang, second_score = detection_helper.compute_second_best_language(sorted_langs)
         if detection_helper.is_ambiguous(best_score, second_score):
             return {'word': word, 'language': self.AMBIGUOUS_LANGUAGE, 'confidence': None}
         conf = detection_helper.compute_confidence(best_score, second_score)
-        return {'word': word, 'language': best, 'confidence': round(conf, 2)}
+        return {'word': word, 'language': best_lang, 'confidence': round(conf, 2)}
 
     def detect_text_languages(self, text: str,
                               context_window: int = DEFAULT_CONTEXT_WINDOW) -> List[Dict]:
