@@ -185,7 +185,7 @@ class WordLevelLanguageDetector:
             Example: {'the': 1, 'and': 2, 'to': 3, ...}
         """
         sorted_ngrams = sorted(frequency_map.items(), key=lambda item: item[1], reverse=True)
-        return detection_helper.CreateRankMap(sorted_ngrams)
+        return detection_helper.create_rank_map(sorted_ngrams)
     
     def _out_of_place_distance(self, word: str, language: str) -> float:
         """
@@ -297,14 +297,14 @@ class WordLevelLanguageDetector:
         best_language, best_score = sorted_languages[0]
         # Example: best_language = 'English', best_score = 0.1234 
         # out of e.g. [('English', 0.1234), ('German', 0.2345), ...]
-        second_language, second_score = detection_helper.ComputeSecondBestLanguage(sorted_languages)
+        second_language, second_score = detection_helper.compute_second_best_language(sorted_languages)
         
         # Ambiguous if the scores are too similar or too large
         if self._is_detection_ambiguous(best_score, second_score):
             return self._create_ambiguous_result(word)
         
         # Calculate confidence based on score difference
-        confidence = detection_helper.ComputeConfidence(best_score, second_score)
+        confidence = detection_helper.compute_confidence(best_score, second_score)
         return self._create_detection_result(word, best_language, confidence)
     
     def _compute_all_language_distances(self, word: str) -> Dict[str, float]:
@@ -345,7 +345,7 @@ class WordLevelLanguageDetector:
         Returns:
             True if the detection should be considered ambiguous
         """
-        return detection_helper.IsAmbiguous(best_score, second_score)
+        return detection_helper.is_ambiguous(best_score, second_score)
     
     def _create_ambiguous_result(self, word: str) -> Dict[str, Union[str, None]]:
         """
@@ -603,7 +603,7 @@ class WordLevelLanguageDetector:
         tokens = tokenizeWithPadding(text)
         
         # Detect language for each word individually
-        detection_results = detection_helper.DetectLanguageForEachWord(self.detect_word, tokens)
+        detection_results = detection_helper.detect_language_for_each_word(self.detect_word, tokens)
         
         # Apply context smoothing to resolve ambiguous detections
         return self._apply_context_smoothing(detection_results, context_window)

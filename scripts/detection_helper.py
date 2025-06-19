@@ -1,4 +1,4 @@
-def CreateRankMap(sorted_items):
+def create_rank_map(sorted_items):
     """
     Helper function to create a rank map from sorted items.
                 
@@ -13,12 +13,12 @@ def CreateRankMap(sorted_items):
     """
     return {gram: rank for rank, (gram, _) in enumerate(sorted_items, start=1)}
 
-def computeDistance(ranks, grams, K):
+def compute_distance(ranks, grams, K):
     """
     Compute the distance between the n-grams of a text and the n-gram profile of a language.
     
     Example:
-    If the ranks dictionary is {'al': 1, '_ha': 2, ...} and grams is ['al', '_ha', 'xyz'],
+    If the ranks dictionary is {'al': 1, '_ha': 2, ...} and grams are ['al', '_ha', 'xyz'],
     the function will return 1 + 2 + K (where K is the penalty rank for 'xyz' since it is not found in ranks).
     
     :param ranks: A dictionary mapping n-grams to their ranks in the language profile.
@@ -48,27 +48,29 @@ def distance_for_all_languages(word, languages, out_of_place_distance_func):
     """
     return {lang: out_of_place_distance_func(word, lang) for lang in languages}
 
-def ComputeSecondBestLanguage(sorted_langs):
+def compute_second_best_language(sorted_langs):
     """
     Compute the second best language based on the sorted list of languages and their distances.
     :param sorted_langs: A list of tuples where each tuple contains a language and its distance.
-                         Example: [('english', 0.5), ('german', 0.7), ('italian', 0.6)]
+                         Example: [('english', 0.5), ('italian', 0.6), ('german', 0.7)]
     :returns: A tuple containing the second best language and its distance.
     If there is no second best language, returns (None, float('inf')).
     """
     return sorted_langs[1] if len(sorted_langs) > 1 else (None, float('inf'))
 
-def ComputeConfidence(best_score, second_score):
+def compute_confidence(best_score, second_score):
     """
     Compute the confidence score based on the best and second best scores.
-    The confidence score is calculated as the normalized difference between the second best score and the best score.
+    The confidence score is calculated as the relative change between the second best score and the best score.
     :param best_score: The score of the best language.
     :param second_score: The score of the second best language.
-    :returns: A confidence score between 0.1 and 0.95, where 0.1 is the minimum confidence and 0.95 is the maximum.
+    :returns: A confidence score between 0.1 and 0.95
     """
-    return min(0.95, max(0.1, (second_score - best_score) / (second_score if second_score > 0 else 1)))
+    MIN_CONFI = 0.1
+    MAX_CONFI = 0.95
+    return min(MAX_CONFI, max(MIN_CONFI, (second_score - best_score) / (second_score if second_score > 0 else 1)))
 
-def IsAmbiguous(best_score, second_score, ambiguity_margin=0.25):
+def is_ambiguous(best_score, second_score, ambiguity_margin=0.25):
     """
     Check if the language detection is ambiguous based on the best and second best scores.
     
@@ -81,7 +83,7 @@ def IsAmbiguous(best_score, second_score, ambiguity_margin=0.25):
             return True
     return False
 
-def DetectLanguageForEachWord(detect_Word_func, words):
+def detect_language_for_each_word(detect_Word_func, words):
     """
     Detect the language for each word in a list using the provided detection function.
     :param words: A list of words to detect the language for.
