@@ -13,7 +13,7 @@ class WordLevelLanguageDetector(LanguageModelLoader, LanguageDistanceCalculator,
     DEFAULT_NGRAM_RANGE = (2, 3, 4, 5)
     DEFAULT_CONTEXT_WINDOW = 3
     AMBIGUOUS_LANGUAGE = 'Ambiguous'
-    UNKNOWN_LANGUAGE = 'unknown'
+    UNKNOWN_LANGUAGE = 'Unknown'
 
     MIN_CONFIDENCE_THRESHOLD = 1.0
     BASE_SMOOTHED_CONFIDENCE = 0.3
@@ -30,12 +30,14 @@ class WordLevelLanguageDetector(LanguageModelLoader, LanguageDistanceCalculator,
         distances = self.compute_all_language_distances(word)
         sorted_langs = self.sort_languages_by_distance(distances)
         best_lang, best_score = sorted_langs[0]
-        
-        detection_helper.is_unknown(best_score, word, self.UNKNOWN_LANGUAGE)
+
+        detection_helper.is_unknown(self, best_score, word)
         
         second_lang, second_score = detection_helper.compute_second_best_language(sorted_langs)
+        
         if detection_helper.is_ambiguous(best_score, second_score):
             return {'word': word, 'language': self.AMBIGUOUS_LANGUAGE, 'confidence': None}
+        
         conf = detection_helper.compute_confidence(best_score, second_score)
         return {'word': word, 'language': best_lang, 'confidence': round(conf, 2)}
 

@@ -1,20 +1,5 @@
 import math
 
-def create_rank_map(sorted_items):
-    """
-    Helper function to create a rank map from sorted items.
-                
-    - enumerate(sorted_items, start=1) -> Gives for each n-gram its rank starting from 1; example: (1, ('al', 55)), (2, ('_ha', 38)), ...
-    - for rank, (gram,_) in ... -> (gram, _) is taking only the n-gram, not the frequency. _ ignores the frequency value.
-    - {gram: rank for ...} -> Building a distionary: gram = key and rank = value
-    - example: rank_map = {'al': 1, '_ha': 2, ...}
-    
-    :param sorted_items: List of tuples where each tuple contains an n-gram and its frequency, sorted by frequency in descending order.
-    :start n-gram rank at 1.
-    :returns: A dictionary mapping each n-gram to its rank.
-    """
-    return {gram: rank for rank, (gram, _) in enumerate(sorted_items, start=1)}
-
 def compute_distance(ranks, grams, K):
     """
     Compute the distance between the n-grams of a text and the n-gram profile of a language.
@@ -28,7 +13,7 @@ def compute_distance(ranks, grams, K):
     :param K: The penalty rank for n-grams not found in the profile.
     :returns: The sum of ranks for the n-grams in grams, using K for any n-gram not found in ranks.
     """
-    return sum(ranks.get(g, K) for g in grams)
+    return sum(ranks.get(gram, K) for gram in grams)
 
 def distance_for_all_languages(word, languages, out_of_place_distance_func):
     """
@@ -107,10 +92,10 @@ def detect_language_for_each_word(detect_Word_func, words):
     """
     return [detect_Word_func(token) for token in words]
 
-def is_unknown(best_score, word, unknown_string):
+def is_unknown(self, best_score, word):
     if math.isinf(best_score):
             return {
                 'word': word,
-                'language': unknown_string,
+                'language': self.UNKNOWN_LANGUAGE,
                 'confidence': None
             }
