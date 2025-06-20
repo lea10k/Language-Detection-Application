@@ -7,6 +7,7 @@ class ContextSmoother:
     def apply_context_smoothing(self, results, window):
         if len(results) <= 1:
             return results
+        
         smoothed = results.copy()
         for i, res in enumerate(results):
             if self.is_word_ambiguous(res):

@@ -3,11 +3,6 @@ import math
 def compute_distance(ranks, grams, K):
     """
     Compute the distance between the n-grams of a text and the n-gram profile of a language.
-    
-    Example:
-    If the ranks dictionary is {'al': 1, '_ha': 2, ...} and grams is ['al', '_ha', 'xyz'],
-    the function will return 1 + 2 + K (where K is the penalty rank for 'xyz' since it is not found in ranks).
-    
     :param ranks: A dictionary mapping n-grams to their ranks in the language profile.
     :param grams: A list of n-grams extracted from the text.
     :param K: The penalty rank for n-grams not found in the profile.
