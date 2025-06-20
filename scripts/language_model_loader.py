@@ -1,5 +1,4 @@
 import json
-import detection_helper
 
 class LanguageModelLoader:
     """

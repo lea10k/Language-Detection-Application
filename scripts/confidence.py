@@ -1,5 +1,17 @@
 from collections import defaultdict
 
+def compute_confidence(best_score, second_score):
+    """
+    Compute the confidence score based on the best and second best scores.
+    The confidence score is calculated as the relative change between the second best score and the best score.
+    :param best_score: The score of the best language.
+    :param second_score: The score of the second best language.
+    :returns: A confidence score between 0.1 and 0.95
+    """
+    MIN_CONFI = 0.1
+    MAX_CONFI = 0.95
+    return min(MAX_CONFI, max(MIN_CONFI, (second_score - best_score) / (second_score if second_score > 0 else 1)))
+
 def calculate_language_votes(context_words: list, is_valid_vote) -> dict:
     """
     Calculate confidence votes for each language based on context words.
@@ -27,26 +39,6 @@ def calculate_language_votes(context_words: list, is_valid_vote) -> dict:
             language_votes[language] += confidence
     
     return dict(language_votes)
-    
-
-def should_apply_smoothing(language_votes: dict, min_confidence_threshold: float) -> bool:
-    """
-    Determine if smoothing should be applied based on vote confidence.
-    
-    If there are any votes, determine the best language based on the highest confidence.
-    If the best language has a confidence of at least MIN_CONFIDENCE_THRESHOLD, 
-    smoothing should be applied.
-    
-    Args:
-        language_votes: Dictionary of language confidence scores
-        
-    Returns:
-        True if the best language has sufficient confidence for smoothing
-    """
-    if not language_votes:
-        return False
-    highest_confidence = max(language_votes.values())
-    return highest_confidence >= min_confidence_threshold
 
 
 def calculate_smoothed_confidence(vote_confidence: float, base_smooth_confi, max_smooth_confi, confi_scaling_factor) -> float:

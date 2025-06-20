@@ -40,17 +40,6 @@ def compute_second_best_language(sorted_langs):
     """
     return sorted_langs[1] if len(sorted_langs) > 1 else (None, float('inf'))
 
-def compute_confidence(best_score, second_score):
-    """
-    Compute the confidence score based on the best and second best scores.
-    The confidence score is calculated as the relative change between the second best score and the best score.
-    :param best_score: The score of the best language.
-    :param second_score: The score of the second best language.
-    :returns: A confidence score between 0.1 and 0.95
-    """
-    MIN_CONFI = 0.1
-    MAX_CONFI = 0.95
-    return min(MAX_CONFI, max(MIN_CONFI, (second_score - best_score) / (second_score if second_score > 0 else 1)))
 
 def is_ambiguous(best_score, second_score, ambiguity_margin=0.25):
     """
@@ -69,28 +58,9 @@ def is_ambiguous(best_score, second_score, ambiguity_margin=0.25):
         return True
     return False
 
-
-def detect_language_for_each_word(detect_Word_func, words):
-    """
-    Detect the language for each word in a list using the provided detection function.
-    :param words: A list of words to detect the language for.
-    :param detect_Word_func: A function that takes a word and returns its detected language.
-    
-    Example:
-    If detect_Word_func is a function that detects the language of a word,
-    and words is ['hello', 'welt', 'ciao'], this function will return a list like:
-    [
-        {'word': 'hello', 'language': 'english', 'confidence': 0.95},
-        {'word': 'welt', 'language': 'german', 'confidence': 0.85},
-        {'word': 'ciao', 'language': 'italian', 'confidence': 0.90}
-    ]
-    """
-    return [detect_Word_func(token) for token in words]
-
-def is_unknown(self, best_score, word):
+def is_unknown(best_score):
     if math.isinf(best_score):
-            return {
-                'word': word,
-                'language': self.UNKNOWN_LANGUAGE,
-                'confidence': None
-            }
+        return True
+    return False
+        
+            
