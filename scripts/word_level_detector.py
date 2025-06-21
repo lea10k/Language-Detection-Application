@@ -1,6 +1,6 @@
 from typing import Dict, List, Union, Tuple
 import detection_helper
-from tokenization import tokenizeWithPadding
+from tokenization import tokenize_with_padding
 
 from language_model_loader import LanguageModelLoader
 from language_distance_calculator import LanguageDistanceCalculator
@@ -72,7 +72,7 @@ class WordLevelLanguageDetector(LanguageModelLoader, LanguageDistanceCalculator,
                 {'word': 'world', 'language': 'English', 'confidence': 0.90}
             ]
         """
-        input_tokens = tokenizeWithPadding(text)
+        input_tokens = tokenize_with_padding(text)
         context_window = 2 if len(input_tokens) < 20 else 3 #Decide context window size based on number of tokens
         results_for_each_input_word = [self.detect_word(token) for token in input_tokens]
         return self.apply_context_smoothing(results_for_each_input_word, context_window)

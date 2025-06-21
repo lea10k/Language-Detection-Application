@@ -1,6 +1,6 @@
 from text_processing import preprocess_for_trilingual_detection
 
-def tokenizeWithPadding(text):
+def tokenize_with_padding(text):
     """
     Tokenizes the input text after preprocessing for trilingual detection, and adds padding underscores to each word.
 
@@ -9,7 +9,7 @@ def tokenizeWithPadding(text):
     :returns:
         list: A list of words from the input text, each padded with an underscore at the beginning and end.
     Example:
-        >>> tokenizeWithPadding("Hello world!")
+        >>> tokenize_with_padding("Hello world!")
         ['_hello_', '_world_']
     Note:
         The input text is first preprocessed using `preprocessForTrilingualDetection` from the `preprocessing` module.
@@ -21,9 +21,9 @@ def tokenizeWithPadding(text):
     
     return padded_words
 
-"""print(tokenizeWithPadding("This is a test email: test@example.com and a URL: https://www.example.com"))
-print(tokenizeWithPadding("Das ist ein Test mit Zahlen 123 und Sonderzeichen äöüß!"))
-print(tokenizeWithPadding("Questo è un test con numeri 456 e caratteri speciali àèéìíòóùúç!"))
-print(tokenizeWithPadding("Mixed languages: English, Deutsch, Italiano!"))
-print(tokenizeWithPadding("Lea's Haus ist schön."))
-print(tokenizeWithPadding("Luca's casa è bella. Ma anche la sua macchina!"))"""
+"""print(tokenize_with_padding("This is a test email: test@example.com and a URL: https://www.example.com"))
+print(tokenize_with_padding("Das ist ein Test mit Zahlen 123 und Sonderzeichen äöüß!"))
+print(tokenize_with_padding("Questo è un test con numeri 456 e caratteri speciali àèéìíòóùúç!"))
+print(tokenize_with_padding("Mixed languages: English, Deutsch, Italiano!"))
+print(tokenize_with_padding("Lea's Haus ist schön."))
+print(tokenize_with_padding("Luca's casa è bella. Ma anche la sua macchina!"))"""
