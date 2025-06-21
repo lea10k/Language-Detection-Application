@@ -12,7 +12,6 @@ class WordLevelLanguageDetector(LanguageModelLoader, LanguageDistanceCalculator,
     Orchestrates language detection using models, distances, and smoothing.
     """
     DEFAULT_NGRAM_RANGE = (2, 3, 4, 5)
-    DEFAULT_CONTEXT_WINDOW = 3
     AMBIGUOUS_LANGUAGE = 'Ambiguous'
     UNKNOWN_LANGUAGE = 'Unknown'
 
@@ -58,8 +57,7 @@ class WordLevelLanguageDetector(LanguageModelLoader, LanguageDistanceCalculator,
         conf = compute_confidence(best_score, second_score)
         return {'word': word, 'language': best_lang, 'confidence': round(conf, 2)}
 
-    def detect_text_languages(self, text: str,
-                              context_window: int = DEFAULT_CONTEXT_WINDOW) -> List[Dict]:
+    def detect_text_languages(self, text: str) -> List[Dict]:
         """
         Detect languages for each word in a given text, applying context smoothing.
         Args:
@@ -75,5 +73,6 @@ class WordLevelLanguageDetector(LanguageModelLoader, LanguageDistanceCalculator,
             ]
         """
         input_tokens = tokenizeWithPadding(text)
+        context_window = 2 if len(input_tokens) < 20 else 3 #Decide context window size based on number of tokens
         results_for_each_input_word = [self.detect_word(token) for token in input_tokens]
         return self.apply_context_smoothing(results_for_each_input_word, context_window)
