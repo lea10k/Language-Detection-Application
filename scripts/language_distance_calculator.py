@@ -55,7 +55,7 @@ class LanguageDistanceCalculator:
         """
         ngram_arr = np.array(ngrams_of_word)
         vec = np.vectorize(lambda gram: rank_mapping.get(gram, penalty_rank)) # search for each n-gram in the rank mapping, use penalty rank if not found
-        print(f"Rank mapping for n-grams: {rank_mapping}, Penalty rank: {penalty_rank}")
+        #print(f"Rank mapping for n-grams: {rank_mapping}, Penalty rank: {penalty_rank}")
         return vec(ngram_arr)
 
     def compute_all_language_distances(self, word):

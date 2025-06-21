@@ -1,36 +1,6 @@
 import math
 
-def compute_distance(ranks, grams, K):
-    """
-    Compute the distance between the n-grams of a text and the n-gram profile of a language.
-    :param ranks: A dictionary mapping n-grams to their ranks in the language profile.
-    :param grams: A list of n-grams extracted from the text.
-    :param K: The penalty rank for n-grams not found in the profile.
-    :returns: The sum of ranks for the n-grams in grams, using K for any n-gram not found in ranks.
-    """
-    return sum(ranks.get(gram, K) for gram in grams)
-
-def distance_for_all_languages(word, languages, out_of_place_distance_func):
-    """
-    Computes the Out-of-Place distance for a word against all languages.
-    
-    Example:
-    If the word is "hello" and languages are ['english', 'german', 'italian']:
-    This function will return a dictionary like:
-    {
-        'english': 0.5,
-        'german': 0.7,
-        'italian': 0.6
-    }
-    
-    :param word: The word to analyze.
-    :param languages: A list of languages to compare against.
-    :param out_of_place_distance_func: A function that computes the Out-of-Place distance for a word in a given language.
-    :returns: A dictionary mapping each language to its Out-of-Place distance for the given word.
-    """
-    return {lang: out_of_place_distance_func(word, lang) for lang in languages}
-
-def compute_second_best_language(sorted_langs):
+def compute_second_best_language(sorted_langs) -> tuple:
     """
     Compute the second best language based on the sorted list of languages and their distances.
     :param sorted_langs: A list of tuples where each tuple contains a language and its distance.
@@ -41,7 +11,7 @@ def compute_second_best_language(sorted_langs):
     return sorted_langs[1] if len(sorted_langs) > 1 else (None, float('inf'))
 
 
-def is_ambiguous(best_score, second_score, ambiguity_margin=0.25):
+def is_ambiguous(best_score, second_score, ambiguity_margin=0.25) -> bool:
     """
     Check if the language detection result is ambiguous based on the best and second best distance scores.
 
@@ -58,7 +28,10 @@ def is_ambiguous(best_score, second_score, ambiguity_margin=0.25):
         return True
     return False
 
-def is_unknown(best_score):
+def is_unknown(best_score) -> bool:
+    """
+    Check if the best score indicates an unknown language.
+    """
     if math.isinf(best_score):
         return True
     return False

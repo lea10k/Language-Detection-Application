@@ -5,8 +5,6 @@ from word_level_detector import WordLevelLanguageDetector
 from website_functions import replace_processed_text, colorize_text, count_amount_of_words_of_language
 import website_functions
 
-
-
 app = Flask(__name__)  
 
 model_paths = {
@@ -41,6 +39,13 @@ def index():
 
 @app.route("/detect", methods=["POST"])  # Define route for '/detect', accepts POST requests
 def detect():
+    """
+    This function retrieves the text from the form, processes it to detect languages,
+    and returns the results to be displayed on the webpage.
+    It uses the WordLevelLanguageDetector to analyze the text and returns the processed results
+    along with the original text and additional information such as colored text and word counts.
+    :return: Rendered HTML template with detection results.
+    """
     text = request.form["submission"]  # Get the value of the 'submission' field from the form data
     results = detector.detect_text_languages(text)
     final = replace_processed_text(results, text)
