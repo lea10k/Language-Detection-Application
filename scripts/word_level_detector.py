@@ -12,7 +12,7 @@ class WordLevelLanguageDetector(LanguageModelLoader, LanguageDistanceCalculator,
     Orchestrates language detection using models, distances, and smoothing.
     """
     DEFAULT_NGRAM_RANGE = (2, 3, 4, 5)
-    DEFAULT_CONTEXT_WINDOW = 2
+    DEFAULT_CONTEXT_WINDOW = 3
     AMBIGUOUS_LANGUAGE = 'Ambiguous'
     UNKNOWN_LANGUAGE = 'Unknown'
 
