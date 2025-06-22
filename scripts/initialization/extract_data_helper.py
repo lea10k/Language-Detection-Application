@@ -3,12 +3,11 @@ from n_gram_computation import compute_n_gram
 from nltk.corpus import PlaintextCorpusReader
 from nltk.probability import FreqDist
 
-def get_whole_text(corpus_root):
+def get_whole_text(corpus_root) -> str:
     """
     Get the whole text from the data set
-
-    :param corpus_files: List of file IDs in the corpus
-    :param corpus: The corpus to read from (default is a PlaintextCorpusReader)
+    :param corpus_root: The root directory of the corpus
+    :returns: Concatenated text from all files in the corpus
     """
     corpus = PlaintextCorpusReader(corpus_root, '.*\.txt')
     corpus_files = corpus.fileids()
@@ -36,10 +35,10 @@ def sort_frequencies(freq_dist):
     """
     # Check if input is a dictionary
     if isinstance(freq_dist, dict):
-        sorted_freq = sorted(freq_dist.items(), key=keyFunction, reverse=True)
+        sorted_freq = sorted(freq_dist.items(), key=key_function, reverse=True)
     # Check if input is a list of tuples
     elif isinstance(freq_dist, list):
-        sorted_freq = sorted(freq_dist, key=keyFunction, reverse=True)
+        sorted_freq = sorted(freq_dist, key=key_function, reverse=True)
     else:
         raise TypeError("Input must be either a dictionary or a list of tuples")
     
@@ -56,7 +55,7 @@ def compute_frequencies(tokenized_text, n):
     n_grams = compute_n_gram(tokenized_text, n)
     # Compute frequency distribution
     freq_dist = FreqDist(n_grams)
-    return SortFrequencies(freq_dist)
+    return sort_frequencies(freq_dist)
 
 def compute_frequencies_for_unigrams(tokenized_text):
     """
@@ -66,7 +65,7 @@ def compute_frequencies_for_unigrams(tokenized_text):
     """
     # Compute frequency distribution for unigrams
     freq_dist = FreqDist(tokenized_text)
-    return SortFrequencies(freq_dist)
+    return sort_frequencies(freq_dist)
 
 def save_as_json(data, filename):
     """

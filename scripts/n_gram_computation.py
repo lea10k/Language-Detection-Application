@@ -13,9 +13,5 @@ def compute_n_gram(words, n):
         n_grams.extend(arr)
     return np.array(n_grams)
     
-
-
-"""import tokenization
-
-print(compute_n_gram(tokenization.tokenizeWithPadding("This is a test email: test@example.com and a URL: https://www.example.com"), 4))"""
-#print(compute_n_gram(['_haus_'], 5))  # Example usage, should print ['_ha', 'al', 'll', 'lo', 'o_', '_w', 'we', 'el', 'lt', 't_']
+#print(compute_n_gram(['_haus_'], 5))  
+#print(compute_n_gram(["_c'e_"], 2))
