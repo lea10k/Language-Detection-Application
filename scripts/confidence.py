@@ -20,8 +20,8 @@ def calculate_language_votes(context_words: list, is_valid_vote) -> dict:
     add its confidence to the given language vote.
     
     Args:
-        context_words: List of context word detection results
-        
+        context_words: List of context words of detection results
+        is_valid_vote: Function to check if a word result is a valid vote. Means it is not ambiguous or unknown.
     Returns:
         Dictionary mapping language names to their total confidence scores
         
@@ -32,13 +32,14 @@ def calculate_language_votes(context_words: list, is_valid_vote) -> dict:
     """
     language_votes = defaultdict(float)
     
-    for word_result in context_words:
-        if is_valid_vote(word_result):
-            language = word_result['language']
-            confidence = word_result['confidence']
+    for word in context_words:
+        if is_valid_vote(word):
+            language = word['language']
+            confidence = word['confidence']
             language_votes[language] += confidence
     
-    return dict(language_votes)
+    dict_language_votes = dict(language_votes)
+    return dict_language_votes
 
 
 def calculate_smoothed_confidence(vote_confidence: float, base_smooth_confi, max_smooth_confi, confi_scaling_factor) -> float:

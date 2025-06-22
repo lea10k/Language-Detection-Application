@@ -3,7 +3,7 @@ from n_gram_computation import compute_n_gram
 from nltk.corpus import PlaintextCorpusReader
 from nltk.probability import FreqDist
 
-def GetWholeText(corpus_root):
+def get_whole_text(corpus_root):
     """
     Get the whole text from the data set
 
@@ -18,7 +18,7 @@ def GetWholeText(corpus_root):
         text += corpus.raw(file_id)
     return text
 
-def keyFunction(item):
+def key_function(item):
     """
     Function to extract the second element (frequency count) from a tuple
 
@@ -27,7 +27,7 @@ def keyFunction(item):
     """
     return item[1]
 
-def SortFrequencies(freq_dist):
+def sort_frequencies(freq_dist):
     """
     Sort the frequency distribution in descending order based on frequency counts
     
@@ -46,7 +46,7 @@ def SortFrequencies(freq_dist):
     dic_freq_dist = dict(sorted_freq)
     return dic_freq_dist
 
-def ComputeFrequencies(tokenized_text, n):
+def compute_frequencies(tokenized_text, n):
     """
     Compute the frequencies of n-grams in the tokenized text
 
@@ -58,7 +58,7 @@ def ComputeFrequencies(tokenized_text, n):
     freq_dist = FreqDist(n_grams)
     return SortFrequencies(freq_dist)
 
-def ComputeFrequenciesForUnigrams(tokenized_text):
+def compute_frequencies_for_unigrams(tokenized_text):
     """
     Compute the frequencies of unigrams in the tokenized text
 
@@ -68,7 +68,7 @@ def ComputeFrequenciesForUnigrams(tokenized_text):
     freq_dist = FreqDist(tokenized_text)
     return SortFrequencies(freq_dist)
 
-def SaveAsJSON(data, filename):
+def save_as_json(data, filename):
     """
     Save the computed frequencies as a JSON file
     :param data: The data to save (frequency distribution)
