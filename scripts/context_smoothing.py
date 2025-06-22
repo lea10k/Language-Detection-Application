@@ -21,9 +21,9 @@ class ContextSmoother:
              {'word': 'Ciao', 'language': 'Italian', 'confidence': 0.80},
              {'word': 'Mamma', 'language': 'Italian', 'confidence': 0.85}]
         """
-        print("===== Before smoothing =====")
+        """print("===== Before smoothing =====")
         for res in results:
-            print(f"Word={res['word']}, language={res['language']}, confidence={res['confidence']}")
+            print(f"Word={res['word']}, language={res['language']}, confidence={res['confidence']}")"""
 
         if len(results) <= 1:
             return results
@@ -33,20 +33,20 @@ class ContextSmoother:
         for i, res in enumerate(results):
             if self.is_word_ambiguous(res):
                 ctx = self.extract_context_window(results, i, window)
-                print(f"Context for word '{res['word']}': {ctx}")
+                ##print(f"Context for word '{res['word']}': {ctx}")
                 votes = confidence.calculate_language_votes(ctx, self.is_valid_vote)
-                print(f"Context votes for word '{res['word']}': {votes}")
+                #print(f"Context votes for word '{res['word']}': {votes}")
                 if self.should_apply_smoothing(votes):
                     lang = self.get_best_voted_language(votes)
                     conf = confidence.calculate_smoothed_confidence(
                         votes[lang], self.BASE_SMOOTHED_CONFIDENCE,
                         self.MAX_SMOOTHED_CONFIDENCE,
                         self.CONFIDENCE_SCALING_FACTOR)
-                    print(f"Applying smoothing for word '{res['word']}': language={lang}, confidence={conf}")
+                    #print(f"Applying smoothing for word '{res['word']}': language={lang}, confidence={conf}")
                     self.update_word_detection(smoothed[i], lang, conf)
-        print("===== After smoothing =====")
+        """#print("===== After smoothing =====")
         for res in smoothed:
-            print(f"Word={res['word']}, language={res['language']}, confidence={res['confidence']}")
+            print(f"Word={res['word']}, language={res['language']}, confidence={res['confidence']}")"""
         return smoothed
 
     def is_word_ambiguous(self, word_result) -> bool:

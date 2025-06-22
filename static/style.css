@@ -32,7 +32,7 @@ textarea#input_field:focus {
   background-color: rgb(99, 130, 255);
 }
 
-@media (max-width: 992px) {
+@media (max-width: 992px){
   .col-lg-6,
   .col-lg-3 {
     flex: 0 0 100%;
@@ -56,3 +56,5 @@ ul.list-unstyled li {
 .card .card-body form textarea#input_field {
   max-height: none;
 }
+
+

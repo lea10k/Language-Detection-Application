@@ -60,7 +60,8 @@ class LanguageModelLoader:
 
     def create_rank_mapping(self, frequency_map):
         """
-        Create a rank mapping from the frequency map.
+        Create a rank mapping from the frequency map. 1st rank is the most frequent n-gram.
+        2nd rank is the second most frequent n-gram, and so on.
         args:
             frequency_map (dict): A dictionary where keys are n-grams and values are their frequencies
         returns:

@@ -34,7 +34,7 @@ def is_ambiguous(detector, best_score, second_score, single_margin=0.1, multi_ma
     margin = single_margin if len(tokens) < 10 else multi_margin
 
     rel_diff = (second_score - best_score) / best_score
-    print(f"Relative difference: {rel_diff}, Margin: {margin}")
+    #print(f"Relative difference: {rel_diff}, Margin: {margin}")
     return rel_diff < margin
 
 def is_unknown(best_score) -> bool:

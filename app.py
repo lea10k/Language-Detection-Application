@@ -1,9 +1,11 @@
 import sys
+sys.path.append('/home/lea_k/language_detection_project/Language-Detection-Application/scripts')
+
 import website_functions
-from flask import Flask, request, render_template  
-sys.path.append('/home/lea_k/language_detection_project/Language-Detection-Application/scripts')  
-from word_level_detector import WordLevelLanguageDetector
 from website_functions import replace_processed_text, colorize_text, count_amount_of_words_of_language
+
+from flask import Flask, request, render_template  
+from word_level_detector import WordLevelLanguageDetector
 
 app = Flask(__name__)  
 

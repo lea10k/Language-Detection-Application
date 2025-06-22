@@ -47,7 +47,7 @@ class WordLevelLanguageDetector(LanguageModelLoader, LanguageDistanceCalculator,
         
         best_lang, best_score = sorted_langs[0]
         second_lang, second_score = detection_helper.compute_second_best_language(sorted_langs)
-        print(f"Best language: {best_lang}, Score: {best_score}, Second language: {second_lang}, Score: {second_score}")
+        #print(f"Best language: {best_lang}, Score: {best_score}, Second language: {second_lang}, Score: {second_score}")
         
         if detection_helper.is_unknown(best_score):
             #print(f"Detected unknown language for word '{word}'")
@@ -60,7 +60,7 @@ class WordLevelLanguageDetector(LanguageModelLoader, LanguageDistanceCalculator,
         conf = compute_confidence(best_score, second_score)
         #print(f"Computed confidence for word '{word}': {conf}")
         result = {'word': word, 'language': best_lang, 'confidence': round(conf, 2)}
-        print(result)
+        #print(result)
         return result
 
     def detect_text_languages(self, text: str) -> List[Dict]:
@@ -84,13 +84,13 @@ class WordLevelLanguageDetector(LanguageModelLoader, LanguageDistanceCalculator,
         self.context_window = context_window
         
         results_for_each_input_word = [self.detect_word(token) for token in self.input_tokens]
-        print("Detection results for each input word:")
+        """print("Detection results for each input word:")
         for res in results_for_each_input_word:
-            print(f"Word={res['word']}, language={res['language']}, confidence={res['confidence']}")
-            
+            print(f"Word={res['word']}, language={res['language']}, confidence={res['confidence']}")"""
+
         # Apply context smoothing to the results
         result_after_smoothing = self.apply_context_smoothing(results_for_each_input_word, context_window)
-        print("Final detection results after smoothing:")
+        """print("Final detection results after smoothing:")
         for res in result_after_smoothing:
-            print(f"Word={res['word']}, language={res['language']}, confidence={res['confidence']}")
+            print(f"Word={res['word']}, language={res['language']}, confidence={res['confidence']}")"""
         return result_after_smoothing

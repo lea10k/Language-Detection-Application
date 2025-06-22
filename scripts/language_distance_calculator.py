@@ -26,7 +26,7 @@ class LanguageDistanceCalculator:
                 total_distance += dist
                 number_of_ngram_profiles += 1
         distance = total_distance / number_of_ngram_profiles if number_of_ngram_profiles > 0 else float('inf')
-        print(f"Mean rank distance across all n-gram profiles for word '{word}' in language '{language}': {distance}")
+        #print(f"Mean rank distance across all n-gram profiles for word '{word}' in language '{language}': {distance}")
         return distance
     
 
@@ -50,7 +50,7 @@ class LanguageDistanceCalculator:
         penalty = self.penalty_rank.get(language, {}).get(n, 1000)#penalty_rank from LanguageModelLoader
         ranks = self.get_ngram_ranks(ngrams_of_word, rank_map, penalty)
         distance = np.sum(ranks) / len(ngrams_of_word) #ranks of word n-grams from n-gram profiles 
-        print(f"Computed mean rank distance for word '{word}' in language '{language}' with n={n}: {distance}")
+        #print(f"Computed mean rank distance for word '{word}' in language '{language}' with n={n}: {distance}")
         return distance
 
     def get_ngram_ranks(self, ngrams_of_word, rank_mapping, penalty_rank) -> np.ndarray:
@@ -88,5 +88,5 @@ class LanguageDistanceCalculator:
             list: A sorted list of tuples (language, distance) sorted by distance in ascending order.
         """
         sorted_languages = sorted(distances.items(), key=lambda x: x[1])
-        print(f"Sorted languages by distance for word: {sorted_languages}")
+        #print(f"Sorted languages by distance for word: {sorted_languages}")
         return sorted_languages
