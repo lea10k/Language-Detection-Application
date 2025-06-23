@@ -73,5 +73,3 @@ class LanguageModelLoader:
         # (gram, _) is taking only the n-gram, not the frequency. _ ignores the frequency value.
         rank_map = {gram: rank for rank, (gram, _) in enumerate(sorted_ngrams, start=1)}
         return rank_map
-
-# WO WIRD DER PENALTY RANK EINGEFÜGT?

@@ -55,7 +55,8 @@ class LanguageDistanceCalculator:
 
     def get_ngram_ranks(self, ngrams_of_word, rank_mapping, penalty_rank) -> np.ndarray:
         """
-        Get the ranks for the n-grams of a word based on the rank mapping and penalty rank.
+        Get the ranks for the n-grams of a word based on the rank mapping and penalty rank 
+        of each language profile.
         args:
             ngrams_of_word (list): List of n-grams extracted from the word.
             rank_mapping (dict): A dictionary mapping n-grams to their ranks.
