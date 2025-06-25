@@ -1,5 +1,5 @@
 import sys
-sys.path.append('/home/lea_k/language_detection_project/Language-Detection-Application/scripts')
+sys.path.append('./scripts')
 
 import website_functions
 from website_functions import replace_processed_text, colorize_text, count_amount_of_words_of_language
@@ -11,22 +11,22 @@ app = Flask(__name__)
 
 model_paths = {
     'German': {
-        '2gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/german/2grams.json',
-        '3gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/german/3grams.json',
-        '4gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/german/4grams.json',
-        '5gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/german/5grams.json'
+        '2gram': './json_data/german/2grams.json',
+        '3gram': './json_data/german/3grams.json',
+        '4gram': './json_data/german/4grams.json',
+        '5gram': './json_data/german/5grams.json'
     },
     'English': {
-        '2gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/english/2grams.json',
-        '3gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/english/3grams.json',
-        '4gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/english/4grams.json',
-        '5gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/english/5grams.json'
+        '2gram': './json_data/english/2grams.json',
+        '3gram': './json_data/english/3grams.json',
+        '4gram': './json_data/english/4grams.json',
+        '5gram': './json_data/english/5grams.json'
     },
     'Italian': {
-        '2gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/italian/2grams.json',
-        '3gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/italian/3grams.json',
-        '4gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/italian/4grams.json',
-        '5gram': '/home/lea_k/language_detection_project/Language-Detection-Application/json_data/italian/5grams.json'
+        '2gram': './json_data/italian/2grams.json',
+        '3gram': './json_data/italian/3grams.json',
+        '4gram': './json_data/italian/4grams.json',
+        '5gram': './json_data/italian/5grams.json'
     }
 }
 
