@@ -55,7 +55,6 @@ For a detailed list and descriptions of all scripts, see the scripts directory.
 - Python 3.8+ (recommended)
 - pip (Python package manager)
 - Linux/Debian terminal, WSL, or similar (Windows users: use WSL or compatible terminal)
-- (Optional) Visual Studio Code (VS Code)
 
 ### Install Required Packages
 
@@ -80,28 +79,15 @@ From your project directory:
 python app.py
 ```
 
-**Note:** Do not close this terminal window while the server is running.
+**Note:** When you use an environment, make sure it is activated!
 
 ### Test the Server
 
-- Open a new terminal in your project directory.
-- (Optional) Activate your virtual environment again, if used.
-- Test server response:
+- Test server response by clicking on the shown link:
   ```bash
-  curl localhost:8000
+  * Running on http://127.0.0.1:8000
   ```
 - Or open your browser to: [http://127.0.0.1:8000](http://127.0.0.1:8000)
-
-### (Optional) Open with VS Code
-
-If using a virtual environment:
-```bash
-code .
-```
-
-VS Code should detect your virtual environment automatically.
-
-**Note:** On first use, NLTK may prompt for additional dataset downloads. Follow on-screen instructions or consult the NLTK documentation.
 
 ## Project Structure
 
