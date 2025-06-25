@@ -2,15 +2,6 @@
 
 A web-based language detection tool built in Python, with a user-friendly interface (HTML/CSS) and backend logic for detecting the language of input text. The application uses word-based analysis for (currently) English, Italian and German language.
 
-## Table of Contents
-
-- Features
-- Constraints & Limitations
-- Installation
-- Launch & Usage
-- Project Structure
-- License
-
 ## How does the website work?
 
 - Enter text in English, Italian, or German into the input field on the left side of the page.
